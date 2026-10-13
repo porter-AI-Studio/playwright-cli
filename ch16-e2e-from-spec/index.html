@@ -1,0 +1,124 @@
+<!DOCTYPE html><html lang="zh-TW" data-astro-cid-ccykbmgk><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>從測試案例 / charter 到 Playwright 測試檔 | Playwright CLI 完整指南</title><meta name="description" content="兩階段工作流：先抓測試案例步驟產出測試計畫與缺口分析，再轉成重用既有 Page Object 的 Playwright 自動化測試，並保留驗證軌跡。"><link rel="icon" href="/playwright-cli/favicon.svg" type="image/svg+xml"><script>
+    (function () {
+      const s = localStorage.getItem('cc-theme');
+      const d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (s === 'dark' || (!s && d)) document.documentElement.classList.add('dark');
+    })();
+  </script><link rel="stylesheet" href="/playwright-cli/_astro/DocsLayout.jWWT8cTA.css"></head><body data-astro-cid-ccykbmgk><div id="pb" data-astro-cid-ccykbmgk></div><header data-astro-cid-ccykbmgk><div class="hi" data-astro-cid-ccykbmgk><div class="hl" data-astro-cid-ccykbmgk><button id="mbtn" class="ibtn" aria-label="選單" data-astro-cid-ccykbmgk><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" data-astro-cid-ccykbmgk></path></svg></button><a href="/playwright-cli/" class="site-name" data-astro-cid-ccykbmgk><span class="logo" data-astro-cid-ccykbmgk>PW</span>&nbsp;&nbsp;Playwright CLI 完整指南</a></div><div class="hr" data-astro-cid-ccykbmgk><button id="tt" class="ibtn" aria-label="切換主題" data-astro-cid-ccykbmgk><svg id="isun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728 0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" data-astro-cid-ccykbmgk></path></svg><svg id="imoon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 0 1 8.646 3.646 9.003 9.003 0 0 0 12 21a9.003 9.003 0 0 0 8.354-5.646z" data-astro-cid-ccykbmgk></path></svg></button></div></div></header><div id="layout" data-astro-cid-ccykbmgk><nav id="sb" data-astro-cid-ccykbmgk><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="0" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 0：前言</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="0" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/preface" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>0.</span><span data-astro-cid-ccykbmgk>前言</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="1" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 1：認識 Playwright CLI</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="1" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch01-what-is-playwright-cli" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>1.</span><span data-astro-cid-ccykbmgk>Playwright CLI 是什麼，以及為什麼 AI agent 需要它</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch02-cli-vs-mcp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>2.</span><span data-astro-cid-ccykbmgk>Playwright CLI vs Playwright MCP：token 經濟學與選型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch03-terminology" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>3.</span><span data-astro-cid-ccykbmgk>釐清「Playwright CLI」的兩種意思：npx playwright 與 @playwright/cli</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="2" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 2：安裝與環境設定</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="2" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch04-install" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>4.</span><span data-astro-cid-ccykbmgk>安裝：CLI 本體與 skills 兩層模型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch05-browsers-config" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>5.</span><span data-astro-cid-ccykbmgk>瀏覽器安裝、設定檔與環境變數</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch06-agent-setup" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>6.</span><span data-astro-cid-ccykbmgk>在 Claude Code / Codex 裡啟用 skill 並驗證</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="3" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 3：核心操作模型</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="3" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch07-snapshot-ref-loop" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>7.</span><span data-astro-cid-ccykbmgk>Snapshot → ref → 操作：核心迴圈</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch08-command-reference" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>8.</span><span data-astro-cid-ccykbmgk>完整指令參考：Core / Navigation / Storage / Network / DevTools</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch09-targeting-elements" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>9.</span><span data-astro-cid-ccykbmgk>元素定位：ref、CSS selector、Playwright locator、find</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch10-sessions-storage" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>10.</span><span data-astro-cid-ccykbmgk>命名 session、persistent profile 與 storage state</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="4" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 4：進階能力</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="4" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch11-network-mock" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>11.</span><span data-astro-cid-ccykbmgk>網路攔截與 Mock：route / unroute</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch12-codegen-recording" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>12.</span><span data-astro-cid-ccykbmgk>codegen、recording、tracing 與 video</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch13-attach-cdp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>13.</span><span data-astro-cid-ccykbmgk>attach 既有瀏覽器：CDP、extension 與視覺儀表板</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch14-test-generation" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>14.</span><span data-astro-cid-ccykbmgk>測試生成：plan / generate / heal</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="5" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 5：AI Agent 實戰工作流</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="5" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch15-exploratory-testing" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>15.</span><span data-astro-cid-ccykbmgk>用 Claude Code + Playwright CLI 做探索性測試</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch16-e2e-from-spec" class="active" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>16.</span><span data-astro-cid-ccykbmgk>從測試案例 / charter 到 Playwright 測試檔</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch17-freeze-to-script" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>17.</span><span data-astro-cid-ccykbmgk>把探索流程固化成腳本，省下 AI token</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch18-pitfalls-faq" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>18.</span><span data-astro-cid-ccykbmgk>踩雷、疑難排解與 FAQ</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="6" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 6：附錄</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="6" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/about" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>19.</span><span data-astro-cid-ccykbmgk>關於本書與資料來源</span></a></li></ul></div></nav><div id="ov" data-astro-cid-ccykbmgk></div><main data-astro-cid-ccykbmgk><div class="cb" data-astro-cid-ccykbmgk><p class="clabel">第 16 章 · Part 5：AI Agent 實戰工作流</p><h1>從測試案例 / charter 到 Playwright 測試檔</h1><p class="cdesc">先產計畫、標缺口，再落地成重用 Page Object 的測試。</p><h2>兩階段工作流</h2><ol><li><strong>抓步驟 → 產測試計畫。</strong>從測試管理系統（或一份 charter / JSON）取得測試案例的詳細步驟， 讓 agent 用 <code>playwright-cli</code> 驅動 live app、把每一步的 YAML snapshot 存到磁碟，產出一份測試計畫文件—— 包含 live DOM 驗證、主要核心工作流、以及被標出來的 gap 與 negative 情境。</li><li><strong>計畫 → Playwright 測試檔。</strong>把計畫轉成測試，重用專案裡<strong>已經有的</strong> Page Object， 不寫 raw CSS / XPath、不自己新增 Page Object 檔，測試開頭放 <code>// Created By AI</code> 問責標記。</li></ol><figure class="svg-fig">
+<svg viewBox="0 0 800 450" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-ch16-main" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--border)" />
+    </marker>
+    <marker id="arr-ch16-dash" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#8b5cf6" />
+    </marker>
+  </defs>
+
+  <g font-family="system-ui, sans-serif">
+
+  <!-- 輸入 -->
+  <rect x="260" y="30" width="280" height="60" rx="8" fill="var(--bg2)" stroke="var(--border)" stroke-width="2" />
+  <text x="400" y="55" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">輸入：測試案例步驟</text>
+  <text x="400" y="75" text-anchor="middle" font-size="14px" fill="var(--muted)">測試管理系統 / charter / JSON</text>
+
+  <path d="M 400 90 L 400 122" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch16-main)" />
+
+  <!-- 階段一 -->
+  <rect x="210" y="130" width="380" height="70" rx="8" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="2" />
+  <text x="400" y="158" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">階段一：驅動 Live App</text>
+  <text x="400" y="178" text-anchor="middle" font-size="14px" fill="var(--muted)">產出測試計畫，標出 gap / negative 情境</text>
+
+  <!-- 右側分支：YAML snapshot -->
+  <path d="M 590 165 L 642 165" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="4" marker-end="url(#arr-ch16-dash)" />
+  <rect x="650" y="140" width="120" height="50" rx="8" fill="rgba(139,92,246,0.07)" stroke="#8b5cf6" stroke-width="1.5" />
+  <text x="710" y="161" text-anchor="middle" font-size="14px" fill="#8b5cf6">YAML snapshot</text>
+  <text x="710" y="178" text-anchor="middle" font-size="14px" fill="var(--muted)">存磁碟</text>
+
+  <path d="M 400 200 L 400 222" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch16-main)" />
+
+  <!-- 階段二 -->
+  <rect x="210" y="230" width="380" height="70" rx="8" fill="rgba(16,185,129,0.08)" stroke="#10b981" stroke-width="2" />
+  <text x="400" y="258" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">階段二：轉 Playwright 測試</text>
+  <text x="400" y="278" text-anchor="middle" font-size="14px" fill="var(--muted)">重用既有 Page Object，不寫 raw selector</text>
+
+  <path d="M 400 300 L 400 310" fill="none" stroke="var(--border)" stroke-width="2" />
+  <path d="M 135 310 L 665 310" fill="none" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4" />
+  <path d="M 135 310 L 135 322" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch16-main)" />
+  <path d="M 400 310 L 400 322" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch16-main)" />
+  <path d="M 665 310 L 665 322" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch16-main)" />
+
+  <!-- 三份產出物 -->
+  <rect x="20" y="330" width="230" height="100" rx="8" fill="var(--bg2)" stroke="var(--border)" stroke-width="2" />
+  <text x="135" y="360" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">測試計畫</text>
+  <text x="135" y="382" text-anchor="middle" font-size="14px" fill="var(--muted)">案例名稱、live DOM 驗證</text>
+  <text x="135" y="402" text-anchor="middle" font-size="14px" fill="var(--muted)">核心工作流、gap 標記</text>
+
+  <rect x="285" y="330" width="230" height="100" rx="8" fill="var(--bg2)" stroke="var(--border)" stroke-width="2" />
+  <text x="400" y="360" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">測試檔</text>
+  <text x="400" y="382" text-anchor="middle" font-size="14px" fill="var(--muted)">每步驟走既有 Page Object</text>
+  <text x="400" y="402" text-anchor="middle" font-size="14px" fill="var(--muted)">沒有 raw selector</text>
+
+  <rect x="550" y="330" width="230" height="100" rx="8" fill="rgba(139,92,246,0.07)" stroke="#8b5cf6" stroke-width="2" />
+  <text x="665" y="360" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">Paper Trail</text>
+  <text x="665" y="382" text-anchor="middle" font-size="14px" fill="#8b5cf6">YAML snapshot 存磁碟</text>
+  <text x="665" y="402" text-anchor="middle" font-size="14px" fill="var(--muted)">記錄驗證了什麼</text>
+
+  </g>
+</svg>
+<figcaption>兩階段工作流：階段一驅動 live app 產出測試計畫並把 YAML snapshot 存到磁碟，階段二重用既有 Page Object 轉成測試檔，最終留下測試計畫、測試檔、paper trail 三份產出物。</figcaption></figure><h2>為什麼這樣做又快又省 token</h2><p>關鍵在第 1 步：agent 驅動 live 應用時，把觀察到的頁面結構<strong>存成 YAML 檔</strong>，而不是把 raw DOM 貼進對話。 模型看到的是精簡引用和檔案路徑，不是上萬 token 的 DOM——這就是整個流程跑得快、token 帳單低的原因（對照 <a href="/ch02-cli-vs-mcp">第 2 章</a>）。</p><h2>一段可以照著改的 prompt</h2><pre><code>連到我們的測試管理系統，取得測試案例 290 的詳細步驟。
+用 Playwright CLI skill 執行一個兩階段流程：
+
+階段一：驅動 live 應用走一遍，產出測試計畫文件，
+        標出主要工作流、live DOM 驗證點、以及缺口與負向情境。
+階段二：把測試案例轉成 Playwright 自動化測試。
+        重用專案裡既有的 Page Object（login / registration），
+        不要自己發明選擇器、不要寫 raw CSS 或 XPath，
+        測試第一行加上 // Created By AI。
+
+把 YAML snapshot 留在 test artifacts 目錄當驗證軌跡。</code></pre><h2>產出物：三份東西</h2><ul><li><strong>測試計畫</strong>——這個案例的名稱、live DOM 驗證、核心工作流步驟，以及 identified gaps and negative scenarios。</li><li><strong>測試檔</strong>——每個動作與斷言都走既有的 Page Object，沒有 raw selector；agent 沒有新造 Page Object，而是找到你已有的兩個並用它們。</li><li><strong>paper trail</strong>——磁碟上的 YAML snapshot，記錄「驗證了什麼、標記了什麼待查」。</li></ul><div class="call tip"><span class="ci">💡</span><div><strong>指向 negative validation，不是再產一份 happy path</strong><p>上一個 station 可能已經用 happy-path 跑過表單，但框架要在入口就守住資料完整性。把這個流程指向「必填欄位驗證」「格式錯誤的 email 被擋下來」這類負向案例，產出的測試對團隊更有價值。</p></div></div><h2>常見踩雷</h2><ul><li>沒明確要求「重用既有 Page Object」→ agent 自己造一份平行的，之後兩套維護。</li><li>沒要求問責標記（<code>// Created By AI</code>）→ 之後分不清哪些測試是 AI 產的。</li><li>跳過階段一的計畫與 gap 分析，直接叫它產測試 → 少了「它探索時發現什麼」這個真正的價值。</li><li>計畫階段目標頁進不去（要登入、要資料）→ 先處理 storage state（<a href="/ch10-sessions-storage">第 10 章</a>）。</li></ul><h2>下一步</h2><p>測試落地後，<a href="/ch17-freeze-to-script">第 17 章</a> 講怎麼把「每次都要 AI 跑」的流程，固化成排程就能跑、不再燒 token 的腳本。</p></div><nav class="cnav" data-astro-cid-ccykbmgk><a href="/playwright-cli/ch15-exploratory-testing" class="prev" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>← 上一章</span><span class="nt" data-astro-cid-ccykbmgk>用 Claude Code + Playwright CLI 做探索性測試</span></a><a href="/playwright-cli/ch17-freeze-to-script" class="next" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>下一章 →</span><span class="nt" data-astro-cid-ccykbmgk>把探索流程固化成腳本，省下 AI token</span></a></nav></main></div><script>
+    // Theme
+    const html = document.documentElement;
+    const tt = document.getElementById('tt');
+    const isun = document.getElementById('isun');
+    const imoon = document.getElementById('imoon');
+    function syncIcons() {
+      const dk = html.classList.contains('dark');
+      isun.style.display = dk ? 'block' : 'none';
+      imoon.style.display = dk ? 'none' : 'block';
+    }
+    syncIcons();
+    tt?.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('cc-theme', html.classList.contains('dark') ? 'dark' : 'light');
+      syncIcons();
+    });
+
+    // Progress
+    const pb = document.getElementById('pb');
+    window.addEventListener('scroll', () => {
+      const t = document.documentElement.scrollHeight - window.innerHeight;
+      pb.style.width = t > 0 ? `${(window.scrollY / t) * 100}%` : '0%';
+    }, { passive: true });
+
+    // Sidebar part toggles
+    document.querySelectorAll('.pt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.pid;
+        const list = document.querySelector(`[data-pl="${id}"]`);
+        btn.classList.toggle('open');
+        list?.classList.toggle('closed');
+      });
+    });
+
+    // Mobile menu
+    const sb = document.getElementById('sb');
+    const ov = document.getElementById('ov');
+    const mb = document.getElementById('mbtn');
+    const open = () => { sb.classList.add('open'); ov.classList.add('open'); document.body.style.overflow='hidden'; };
+    const close = () => { sb.classList.remove('open'); ov.classList.remove('open'); document.body.style.overflow=''; };
+    mb?.addEventListener('click', open);
+    ov?.addEventListener('click', close);
+  </script></body></html>

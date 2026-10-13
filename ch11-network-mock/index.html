@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="zh-TW" data-astro-cid-ccykbmgk><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>網路攔截與 Mock：route / unroute | Playwright CLI 完整指南</title><meta name="description" content="用 route 攔截並偽造 API 回應、模擬錯誤狀態碼與延遲、route-list / unroute 管理攔截規則，以及 allowedOrigins / blockedOrigins 的差異。"><link rel="icon" href="/playwright-cli/favicon.svg" type="image/svg+xml"><script>
+    (function () {
+      const s = localStorage.getItem('cc-theme');
+      const d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (s === 'dark' || (!s && d)) document.documentElement.classList.add('dark');
+    })();
+  </script><link rel="stylesheet" href="/playwright-cli/_astro/DocsLayout.jWWT8cTA.css"></head><body data-astro-cid-ccykbmgk><div id="pb" data-astro-cid-ccykbmgk></div><header data-astro-cid-ccykbmgk><div class="hi" data-astro-cid-ccykbmgk><div class="hl" data-astro-cid-ccykbmgk><button id="mbtn" class="ibtn" aria-label="選單" data-astro-cid-ccykbmgk><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" data-astro-cid-ccykbmgk></path></svg></button><a href="/playwright-cli/" class="site-name" data-astro-cid-ccykbmgk><span class="logo" data-astro-cid-ccykbmgk>PW</span>&nbsp;&nbsp;Playwright CLI 完整指南</a></div><div class="hr" data-astro-cid-ccykbmgk><button id="tt" class="ibtn" aria-label="切換主題" data-astro-cid-ccykbmgk><svg id="isun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728 0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" data-astro-cid-ccykbmgk></path></svg><svg id="imoon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 0 1 8.646 3.646 9.003 9.003 0 0 0 12 21a9.003 9.003 0 0 0 8.354-5.646z" data-astro-cid-ccykbmgk></path></svg></button></div></div></header><div id="layout" data-astro-cid-ccykbmgk><nav id="sb" data-astro-cid-ccykbmgk><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="0" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 0：前言</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="0" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/preface" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>0.</span><span data-astro-cid-ccykbmgk>前言</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="1" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 1：認識 Playwright CLI</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="1" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch01-what-is-playwright-cli" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>1.</span><span data-astro-cid-ccykbmgk>Playwright CLI 是什麼，以及為什麼 AI agent 需要它</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch02-cli-vs-mcp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>2.</span><span data-astro-cid-ccykbmgk>Playwright CLI vs Playwright MCP：token 經濟學與選型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch03-terminology" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>3.</span><span data-astro-cid-ccykbmgk>釐清「Playwright CLI」的兩種意思：npx playwright 與 @playwright/cli</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="2" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 2：安裝與環境設定</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="2" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch04-install" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>4.</span><span data-astro-cid-ccykbmgk>安裝：CLI 本體與 skills 兩層模型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch05-browsers-config" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>5.</span><span data-astro-cid-ccykbmgk>瀏覽器安裝、設定檔與環境變數</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch06-agent-setup" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>6.</span><span data-astro-cid-ccykbmgk>在 Claude Code / Codex 裡啟用 skill 並驗證</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="3" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 3：核心操作模型</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="3" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch07-snapshot-ref-loop" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>7.</span><span data-astro-cid-ccykbmgk>Snapshot → ref → 操作：核心迴圈</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch08-command-reference" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>8.</span><span data-astro-cid-ccykbmgk>完整指令參考：Core / Navigation / Storage / Network / DevTools</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch09-targeting-elements" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>9.</span><span data-astro-cid-ccykbmgk>元素定位：ref、CSS selector、Playwright locator、find</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch10-sessions-storage" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>10.</span><span data-astro-cid-ccykbmgk>命名 session、persistent profile 與 storage state</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="4" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 4：進階能力</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="4" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch11-network-mock" class="active" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>11.</span><span data-astro-cid-ccykbmgk>網路攔截與 Mock：route / unroute</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch12-codegen-recording" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>12.</span><span data-astro-cid-ccykbmgk>codegen、recording、tracing 與 video</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch13-attach-cdp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>13.</span><span data-astro-cid-ccykbmgk>attach 既有瀏覽器：CDP、extension 與視覺儀表板</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch14-test-generation" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>14.</span><span data-astro-cid-ccykbmgk>測試生成：plan / generate / heal</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="5" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 5：AI Agent 實戰工作流</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="5" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch15-exploratory-testing" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>15.</span><span data-astro-cid-ccykbmgk>用 Claude Code + Playwright CLI 做探索性測試</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch16-e2e-from-spec" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>16.</span><span data-astro-cid-ccykbmgk>從測試案例 / charter 到 Playwright 測試檔</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch17-freeze-to-script" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>17.</span><span data-astro-cid-ccykbmgk>把探索流程固化成腳本，省下 AI token</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch18-pitfalls-faq" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>18.</span><span data-astro-cid-ccykbmgk>踩雷、疑難排解與 FAQ</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="6" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 6：附錄</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="6" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/about" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>19.</span><span data-astro-cid-ccykbmgk>關於本書與資料來源</span></a></li></ul></div></nav><div id="ov" data-astro-cid-ccykbmgk></div><main data-astro-cid-ccykbmgk><div class="cb" data-astro-cid-ccykbmgk><p class="clabel">第 11 章 · Part 4：進階能力</p><h1>網路攔截與 Mock：route / unroute</h1><p class="cdesc">不改後端，就能驗證前端在各種 API 回應下的行為。</p><h2>三個指令</h2><pre><code>route &lt;pattern&gt; [opts]   # 攔截符合 pattern 的請求，回傳你指定的內容
+route-list              # 列出目前生效的 route
+unroute [pattern]       # 移除某個 route；不帶 pattern 則清空全部</code></pre><p>pattern 用 glob，<code>**</code> 比對任意路徑片段。</p><figure class="svg-fig">
+<svg viewBox="0 0 800 450" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-ch11-dec" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--border)" />
+    </marker>
+  </defs>
+  <g font-family="system-ui, sans-serif">
+    <rect x="320" y="30" width="160" height="60" fill="var(--bg2)" stroke="var(--border)" stroke-width="2" rx="8" />
+    <text x="400" y="65" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">發送 API 請求</text>
+
+    <path d="M 400 90 L 400 142" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch11-dec)" />
+
+    <rect x="310" y="150" width="180" height="60" fill="var(--bg2)" stroke="var(--accent)" stroke-width="2" rx="20" />
+    <text x="400" y="185" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">符合 pattern？</text>
+
+    <path d="M 310 180 L 190 180 L 190 242" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch11-dec)" />
+    <text x="240" y="170" text-anchor="middle" font-size="15px" fill="var(--muted)">[是]</text>
+
+    <rect x="100" y="250" width="180" height="70" fill="rgba(16,185,129,0.07)" stroke="#10b981" stroke-width="2" rx="8" />
+    <text x="190" y="280" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">回傳 Mock 回應</text>
+    <text x="190" y="302" text-anchor="middle" font-size="14px" fill="#10b981">自訂回應內容與狀態碼</text>
+
+    <path d="M 490 180 L 610 180 L 610 242" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch11-dec)" />
+    <text x="560" y="170" text-anchor="middle" font-size="15px" fill="var(--muted)">[否]</text>
+
+    <rect x="520" y="250" width="180" height="70" fill="rgba(59,130,246,0.07)" stroke="#3b82f6" stroke-width="2" rx="8" />
+    <text x="610" y="280" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">放行至真實後端</text>
+    <text x="610" y="302" text-anchor="middle" font-size="14px" fill="#3b82f6">尚未攔截，放行原始請求</text>
+
+    <path d="M 190 320 L 190 350 L 310 350" fill="none" stroke="var(--border)" stroke-width="2" />
+    <path d="M 610 320 L 610 350 L 490 350" fill="none" stroke="var(--border)" stroke-width="2" />
+    <path d="M 400 350 L 400 372" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch11-dec)" />
+
+    <rect x="310" y="380" width="180" height="50" fill="var(--bg2)" stroke="var(--border)" stroke-width="2" rx="8" />
+    <text x="400" y="410" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">前端依回應渲染</text>
+  </g>
+</svg>
+<figcaption>每個請求先比對是否命中 <code>route</code> 掛的 pattern：命中就回傳你指定的 mock 內容，沒命中就照常放行到真實後端，前端最終都依收到的回應渲染畫面。</figcaption></figure><h2>常見用法</h2><pre><code># 偽造一個 JSON API 回應
+playwright-cli route "https://api.example.com/**" \
+  --body='&#123;"mock":true,"data":[]&#125;' \
+  --content-type=application/json
+
+# 模擬 404
+playwright-cli route "**/avatar.png" --status=404
+
+# 清掉所有攔截
+playwright-cli unroute</code></pre><p>典型場景：</p><ul><li>驗證前端在空清單、錯誤碼、逾時、離線時的畫面與提示。</li><li>把不穩定的第三方 API 換成固定回應，讓探索 / 測試可重現。</li><li>在後端還沒好時，先用 mock 把前端流程跑起來。</li></ul><div class="call warn"><span class="ci">⚠️</span><div><strong><code>--body</code> 裡的大括號要處理引號與跳脫</strong><p><code>--body='&#123;...&#125;'</code> 在 shell 裡要用單引號包住整段 JSON；由 agent 發指令時，注意它有沒有幫你正確跳脫。內容複雜時，改把 JSON 寫成檔案、或用 <code>run-code --filename</code> 走完整 Playwright <code>page.route()</code>。</p></div></div><h2>route 是 session 級的</h2><p>攔截規則跟著 session 走。換一個命名 session（見 <a href="/ch10-sessions-storage">第 10 章</a>）規則就不生效； 重新導航通常會保留規則，但把瀏覽器 <code>close</code> 掉就沒了。用 <code>route-list</code> 隨時確認目前掛了哪些。</p><h2>allowedOrigins / blockedOrigins：限制，但不是防護</h2><p>設定檔的 <code>network.allowedOrigins</code> / <code>blockedOrigins</code>（或環境變數 <code>PLAYWRIGHT_MCP_ALLOWED_ORIGINS</code> / <code>_BLOCKED_ORIGINS</code>） 可以限制瀏覽器能請求哪些來源。規則：<strong>blocklist 先於 allowlist 評估</strong>；同時命中兩者的來源被擋。</p><div class="call warn"><span class="ci">🚫</span><div><strong>官方明講：這不是安全邊界</strong><p><code>allowedOrigins</code> / <code>blockedOrigins</code> <strong>不作為安全邊界、也不影響 redirect</strong>。它適合「讓測試環境不要不小心打到 production API」這種用途，不適合當隔離手段——真要隔離用 OS / 容器層。</p></div></div><h2>看實際流量</h2><p>搭配 DevTools 指令確認攔截有沒有生效：<code>requests</code> 列出頁面載入後的所有請求，<code>request &lt;index&gt;</code> 看單一請求細節，<code>console</code> 看前端有沒有因為 mock 回應報錯。這些在 <a href="/ch12-codegen-recording">第 12 章</a> 一起講。</p><h2>常見踩雷</h2><ul><li>pattern 忘了 <code>**</code>，只寫 <code>https://api.example.com/users</code> → 對不到帶 query string 或子路徑的請求。</li><li>在 A session 掛 route、卻在 B session 操作 → 沒作用。</li><li><code>unroute</code> 不帶 pattern → 一次清光，不是只清一條。</li></ul><h2>下一步</h2><p><a href="/ch12-codegen-recording">第 12 章</a> 進到把操作變成程式碼、把執行變成可回放證據——codegen、recording、tracing、video。</p></div><nav class="cnav" data-astro-cid-ccykbmgk><a href="/playwright-cli/ch10-sessions-storage" class="prev" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>← 上一章</span><span class="nt" data-astro-cid-ccykbmgk>命名 session、persistent profile 與 storage state</span></a><a href="/playwright-cli/ch12-codegen-recording" class="next" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>下一章 →</span><span class="nt" data-astro-cid-ccykbmgk>codegen、recording、tracing 與 video</span></a></nav></main></div><script>
+    // Theme
+    const html = document.documentElement;
+    const tt = document.getElementById('tt');
+    const isun = document.getElementById('isun');
+    const imoon = document.getElementById('imoon');
+    function syncIcons() {
+      const dk = html.classList.contains('dark');
+      isun.style.display = dk ? 'block' : 'none';
+      imoon.style.display = dk ? 'none' : 'block';
+    }
+    syncIcons();
+    tt?.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('cc-theme', html.classList.contains('dark') ? 'dark' : 'light');
+      syncIcons();
+    });
+
+    // Progress
+    const pb = document.getElementById('pb');
+    window.addEventListener('scroll', () => {
+      const t = document.documentElement.scrollHeight - window.innerHeight;
+      pb.style.width = t > 0 ? `${(window.scrollY / t) * 100}%` : '0%';
+    }, { passive: true });
+
+    // Sidebar part toggles
+    document.querySelectorAll('.pt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.pid;
+        const list = document.querySelector(`[data-pl="${id}"]`);
+        btn.classList.toggle('open');
+        list?.classList.toggle('closed');
+      });
+    });
+
+    // Mobile menu
+    const sb = document.getElementById('sb');
+    const ov = document.getElementById('ov');
+    const mb = document.getElementById('mbtn');
+    const open = () => { sb.classList.add('open'); ov.classList.add('open'); document.body.style.overflow='hidden'; };
+    const close = () => { sb.classList.remove('open'); ov.classList.remove('open'); document.body.style.overflow=''; };
+    mb?.addEventListener('click', open);
+    ov?.addEventListener('click', close);
+  </script></body></html>

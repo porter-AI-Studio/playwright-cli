@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="zh-TW" data-astro-cid-ccykbmgk><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>瀏覽器安裝、設定檔與環境變數 | Playwright CLI 完整指南</title><meta name="description" content="說明 install-browser、.playwright/cli.config.json 設定檔 schema，以及 PLAYWRIGHT_MCP_* 環境變數如何控制瀏覽器、逾時、來源白名單與輸出目錄。"><link rel="icon" href="/playwright-cli/favicon.svg" type="image/svg+xml"><script>
+    (function () {
+      const s = localStorage.getItem('cc-theme');
+      const d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (s === 'dark' || (!s && d)) document.documentElement.classList.add('dark');
+    })();
+  </script><link rel="stylesheet" href="/playwright-cli/_astro/DocsLayout.jWWT8cTA.css"></head><body data-astro-cid-ccykbmgk><div id="pb" data-astro-cid-ccykbmgk></div><header data-astro-cid-ccykbmgk><div class="hi" data-astro-cid-ccykbmgk><div class="hl" data-astro-cid-ccykbmgk><button id="mbtn" class="ibtn" aria-label="選單" data-astro-cid-ccykbmgk><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" data-astro-cid-ccykbmgk></path></svg></button><a href="/playwright-cli/" class="site-name" data-astro-cid-ccykbmgk><span class="logo" data-astro-cid-ccykbmgk>PW</span>&nbsp;&nbsp;Playwright CLI 完整指南</a></div><div class="hr" data-astro-cid-ccykbmgk><button id="tt" class="ibtn" aria-label="切換主題" data-astro-cid-ccykbmgk><svg id="isun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728 0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" data-astro-cid-ccykbmgk></path></svg><svg id="imoon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 0 1 8.646 3.646 9.003 9.003 0 0 0 12 21a9.003 9.003 0 0 0 8.354-5.646z" data-astro-cid-ccykbmgk></path></svg></button></div></div></header><div id="layout" data-astro-cid-ccykbmgk><nav id="sb" data-astro-cid-ccykbmgk><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="0" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 0：前言</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="0" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/preface" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>0.</span><span data-astro-cid-ccykbmgk>前言</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="1" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 1：認識 Playwright CLI</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="1" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch01-what-is-playwright-cli" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>1.</span><span data-astro-cid-ccykbmgk>Playwright CLI 是什麼，以及為什麼 AI agent 需要它</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch02-cli-vs-mcp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>2.</span><span data-astro-cid-ccykbmgk>Playwright CLI vs Playwright MCP：token 經濟學與選型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch03-terminology" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>3.</span><span data-astro-cid-ccykbmgk>釐清「Playwright CLI」的兩種意思：npx playwright 與 @playwright/cli</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="2" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 2：安裝與環境設定</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="2" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch04-install" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>4.</span><span data-astro-cid-ccykbmgk>安裝：CLI 本體與 skills 兩層模型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch05-browsers-config" class="active" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>5.</span><span data-astro-cid-ccykbmgk>瀏覽器安裝、設定檔與環境變數</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch06-agent-setup" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>6.</span><span data-astro-cid-ccykbmgk>在 Claude Code / Codex 裡啟用 skill 並驗證</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="3" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 3：核心操作模型</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="3" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch07-snapshot-ref-loop" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>7.</span><span data-astro-cid-ccykbmgk>Snapshot → ref → 操作：核心迴圈</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch08-command-reference" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>8.</span><span data-astro-cid-ccykbmgk>完整指令參考：Core / Navigation / Storage / Network / DevTools</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch09-targeting-elements" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>9.</span><span data-astro-cid-ccykbmgk>元素定位：ref、CSS selector、Playwright locator、find</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch10-sessions-storage" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>10.</span><span data-astro-cid-ccykbmgk>命名 session、persistent profile 與 storage state</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="4" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 4：進階能力</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="4" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch11-network-mock" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>11.</span><span data-astro-cid-ccykbmgk>網路攔截與 Mock：route / unroute</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch12-codegen-recording" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>12.</span><span data-astro-cid-ccykbmgk>codegen、recording、tracing 與 video</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch13-attach-cdp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>13.</span><span data-astro-cid-ccykbmgk>attach 既有瀏覽器：CDP、extension 與視覺儀表板</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch14-test-generation" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>14.</span><span data-astro-cid-ccykbmgk>測試生成：plan / generate / heal</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="5" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 5：AI Agent 實戰工作流</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="5" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch15-exploratory-testing" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>15.</span><span data-astro-cid-ccykbmgk>用 Claude Code + Playwright CLI 做探索性測試</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch16-e2e-from-spec" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>16.</span><span data-astro-cid-ccykbmgk>從測試案例 / charter 到 Playwright 測試檔</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch17-freeze-to-script" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>17.</span><span data-astro-cid-ccykbmgk>把探索流程固化成腳本，省下 AI token</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch18-pitfalls-faq" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>18.</span><span data-astro-cid-ccykbmgk>踩雷、疑難排解與 FAQ</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="6" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 6：附錄</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="6" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/about" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>19.</span><span data-astro-cid-ccykbmgk>關於本書與資料來源</span></a></li></ul></div></nav><div id="ov" data-astro-cid-ccykbmgk></div><main data-astro-cid-ccykbmgk><div class="cb" data-astro-cid-ccykbmgk><p class="clabel">第 5 章 · Part 2：安裝與環境設定</p><h1>瀏覽器安裝、設定檔與環境變數</h1><p class="cdesc">首次 open 會自動抓瀏覽器；其餘行為靠設定檔與環境變數調。</p><h2>瀏覽器：多數情況不用手動裝</h2><p>第一次跑 <code>playwright-cli open</code> 時會自動下載預設瀏覽器。要顯式安裝（準備機器映像、單獨診斷下載、或選非預設引擎）時：</p><pre><code>playwright-cli install-browser              # 裝預設 Chromium
+playwright-cli install-browser firefox      # 指定 Firefox
+playwright-cli install-browser --with-deps  # 連系統相依一起裝（主要用在 Linux）</code></pre><p>這個指令還支援 <code>--dry-run</code>（先看它打算做什麼）、<code>--list</code>（看有哪些可裝的瀏覽器）、<code>--force</code>、<code>--only-shell</code>、<code>--no-shell</code>。</p><div class="call warn"><span class="ci">⚠️</span><div><strong>兩組 install 指令別混用</strong><p>agent CLI 用 <code>playwright-cli install-browser</code>；Playwright Test / library 用 <code>npx playwright install</code>。兩者都會裝 Playwright 管理的瀏覽器，但屬於不同的可執行檔，語法不能互換。</p></div></div><p>要用系統已裝的 Chrome / Edge channel（省一份 Chromium 下載）：</p><pre><code>playwright-cli open https://example.com --browser=chrome
+playwright-cli open https://example.com --browser=msedge</code></pre><h2>設定檔：.playwright/cli.config.json</h2><p>Playwright CLI 預設會讀專案裡的 <code>.playwright/cli.config.json</code>，你也可以用 <code>--config</code> 指定路徑：</p><pre><code>playwright-cli --config path/to/config.json open example.com</code></pre><p>一份實用的最小設定長這樣（大括號在頁面上會正常顯示）：</p><pre><code>&#123;
+  "browser": &#123;
+    "browserName": "chromium",
+    "launchOptions": &#123; "headless": true &#125;,
+    "userDataDir": ".playwright/profile"
+  &#125;,
+  "network": &#123;
+    "allowedOrigins": ["https://your-app.com"],
+    "blockedOrigins": []
+  &#125;,
+  "timeouts": &#123; "action": 5000, "navigation": 30000 &#125;,
+  "outputDir": "./.playwright-cli"
+&#125;</code></pre><p>schema 裡比較常用的欄位：</p><table><thead><tr><th>欄位</th><th>作用</th></tr></thead><tbody><tr><td><code>browser.browserName</code></td><td><code>chromium</code> / <code>firefox</code> / <code>webkit</code></td></tr><tr><td><code>browser.isolated</code></td><td>profile 只留在記憶體、不落地</td></tr><tr><td><code>browser.userDataDir</code></td><td>persistent profile 目錄（不設會用臨時目錄）</td></tr><tr><td><code>browser.launchOptions</code></td><td>傳給 Playwright 的啟動選項，如 <code>channel</code>、<code>headless</code>、<code>executablePath</code></td></tr><tr><td><code>browser.contextOptions</code></td><td>context 選項，如 <code>viewport</code></td></tr><tr><td><code>browser.cdpEndpoint</code> / <code>remoteEndpoint</code></td><td>連既有瀏覽器 / 既有 Playwright server（見 <a href="/ch13-attach-cdp">第 13 章</a>）</td></tr><tr><td><code>outputDir</code></td><td>snapshot / 截圖 / trace 的輸出目錄，預設 <code>.playwright-cli/</code></td></tr><tr><td><code>console.level</code></td><td><code>error</code> / <code>warning</code> / <code>info</code> / <code>debug</code></td></tr><tr><td><code>network.allowedOrigins</code> / <code>blockedOrigins</code></td><td>限制瀏覽器可請求的來源</td></tr><tr><td><code>testIdAttribute</code></td><td>test id 屬性名，預設 <code>data-testid</code></td></tr><tr><td><code>timeouts.action</code> / <code>navigation</code></td><td>動作 / 導航逾時（毫秒）</td></tr><tr><td><code>codegen</code></td><td>動作旁要不要附等效程式碼；<code>none</code> / <code>typescript</code>（預設）/ <code>python</code> / <code>java</code> / <code>csharp</code></td></tr></tbody></table><div class="call tip"><span class="ci">💡</span><div><strong>省 token 是內建行為，不是切一個全域開關</strong><p>實測（0.1.19 版）：<code>open</code> / <code>click</code> 這類動作結束後自動附的 snapshot，本來就只回傳檔案路徑（存進 <code>outputDir</code>，預設 <code>.playwright-cli/</code>），不會把整份 YAML 印進終端。真正會佔 context 的是<strong>你自己主動呼叫</strong>的 <code>snapshot</code> / <code>eval</code> / <code>request</code> 這類指令——不加 <code>--filename</code> 就整包印到 stdout；加了就跟自動 snapshot 一樣只回路徑。這正是 Playwright CLI 省 token 的來源（見 <a href="/ch02-cli-vs-mcp">第 2 章</a>）。</p></div></div><h2>環境變數：前綴是 PLAYWRIGHT_MCP_</h2><p>大部分設定都能用環境變數覆蓋，前綴沿用 MCP 時代的 <code>PLAYWRIGHT_MCP_</code>（不是 <code>PLAYWRIGHT_CLI_</code>）。常用的幾個：</p><table><thead><tr><th>變數</th><th>作用</th></tr></thead><tbody><tr><td><code>PLAYWRIGHT_MCP_HEADLESS</code></td><td>是否 headless（預設 headless）</td></tr><tr><td><code>PLAYWRIGHT_MCP_BROWSER</code></td><td><code>chrome</code> / <code>firefox</code> / <code>webkit</code> / <code>msedge</code></td></tr><tr><td><code>PLAYWRIGHT_MCP_DEVICE</code></td><td>模擬裝置，如 <code>"iPhone 15"</code></td></tr><tr><td><code>PLAYWRIGHT_MCP_VIEWPORT_SIZE</code></td><td>如 <code>"1280x720"</code></td></tr><tr><td><code>PLAYWRIGHT_MCP_OUTPUT_DIR</code></td><td>輸出目錄</td></tr><tr><td><code>PLAYWRIGHT_MCP_USER_DATA_DIR</code></td><td>profile 目錄</td></tr><tr><td><code>PLAYWRIGHT_MCP_ISOLATED</code></td><td>profile 只留記憶體</td></tr><tr><td><code>PLAYWRIGHT_MCP_TIMEOUT_ACTION</code> / <code>_NAVIGATION</code></td><td>逾時（毫秒）</td></tr><tr><td><code>PLAYWRIGHT_MCP_ALLOWED_ORIGINS</code> / <code>_BLOCKED_ORIGINS</code></td><td>分號分隔的來源清單</td></tr><tr><td><code>PLAYWRIGHT_MCP_PROXY_SERVER</code> / <code>_PROXY_BYPASS</code></td><td>proxy 設定</td></tr><tr><td><code>PLAYWRIGHT_MCP_SECRETS_FILE</code></td><td>dotenv 格式的機密檔</td></tr><tr><td><code>PLAYWRIGHT_MCP_STORAGE_STATE</code></td><td>isolated session 的 storage state 檔</td></tr><tr><td><code>PLAYWRIGHT_MCP_CAPS</code></td><td>額外能力，如 <code>vision,pdf</code></td></tr><tr><td><code>PLAYWRIGHT_CLI_SESSION</code></td><td><strong>唯一</strong>用 <code>PLAYWRIGHT_CLI_</code> 前綴的：綁定 agent process 的 session 名（見 <a href="/ch10-sessions-storage">第 10 章</a>）</td></tr></tbody></table><div class="call warn"><span class="ci">⚠️</span><div><strong><code>allowedOrigins</code> / <code>blockedOrigins</code> 不是安全邊界</strong><p>官方明講：它們<strong>不作為安全邊界、也不影響 redirect</strong>。blocklist 先於 allowlist 評估。要真正隔離網路，用 OS / 容器層的手段。</p></div></div><figure class="svg-fig">
+<svg viewBox="0 0 800 440" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-ch05-main" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--border)" />
+    </marker>
+    <marker id="arr-ch05-accent" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--accent)" />
+    </marker>
+  </defs>
+  <g font-family="system-ui, sans-serif">
+
+    <text x="400" y="26" text-anchor="middle" font-size="19px" font-weight="bold" fill="var(--text)">設定生效優先序：預設值 → 設定檔 → 環境變數</text>
+
+    <!-- Level 1: 內建預設值 -->
+    <rect x="250" y="45" width="300" height="64" rx="8" fill="rgba(107,114,128,0.08)" stroke="#6b7280" stroke-width="2" />
+    <text x="400" y="70" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">內建預設值</text>
+    <text x="400" y="90" text-anchor="middle" font-size="15px" fill="var(--muted)">headless / 30s 逾時等出廠設定</text>
+
+    <path d="M 400 109 L 400 142" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch05-main)" />
+    <text x="415" y="129" font-size="14px" fill="var(--muted)">若設定檔有值 → 覆蓋</text>
+
+    <!-- Level 2: 設定檔 -->
+    <rect x="250" y="150" width="300" height="64" rx="8" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="2" />
+    <text x="400" y="175" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">設定檔（cli.config.json）</text>
+    <text x="400" y="195" text-anchor="middle" font-size="15px" fill="var(--muted)">browser / network / timeouts</text>
+
+    <path d="M 400 214 L 400 247" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch05-main)" />
+    <text x="415" y="234" font-size="14px" fill="var(--muted)">同名 PLAYWRIGHT_MCP_* 存在 → 覆蓋</text>
+
+    <!-- Level 3: 環境變數 -->
+    <rect x="250" y="255" width="300" height="64" rx="8" fill="rgba(139,92,246,0.08)" stroke="#8b5cf6" stroke-width="2" />
+    <text x="400" y="280" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">環境變數 PLAYWRIGHT_MCP_*</text>
+    <text x="400" y="300" text-anchor="middle" font-size="15px" fill="var(--muted)">HEADLESS / BROWSER / TIMEOUT_*</text>
+
+    <path d="M 400 319 L 400 352" fill="none" stroke="var(--accent)" stroke-width="2" marker-end="url(#arr-ch05-accent)" />
+    <text x="415" y="339" font-size="14px" fill="var(--accent)">最終生效</text>
+
+    <!-- 結果 -->
+    <rect x="225" y="360" width="350" height="54" rx="8" fill="rgba(16,185,129,0.08)" stroke="#10b981" stroke-width="2" />
+    <text x="400" y="392" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">實際生效的瀏覽器 / 逾時 / 白名單設定</text>
+
+    <!-- 側邊例外備註：PLAYWRIGHT_CLI_SESSION -->
+    <rect x="600" y="150" width="170" height="130" rx="8" fill="var(--bg2)" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 4" />
+    <text x="685" y="175" text-anchor="middle" font-size="15px" font-weight="bold" fill="var(--accent)">⚠ 例外</text>
+    <text x="685" y="198" text-anchor="middle" font-size="14px" fill="var(--text)" opacity="0.8">PLAYWRIGHT_CLI_SESSION</text>
+    <text x="685" y="220" text-anchor="middle" font-size="14px" fill="var(--muted)">前綴不同、只綁定</text>
+    <text x="685" y="238" text-anchor="middle" font-size="14px" fill="var(--muted)">session 名稱</text>
+    <text x="685" y="256" text-anchor="middle" font-size="14px" fill="var(--muted)">不是覆蓋設定值</text>
+
+  </g>
+</svg>
+<figcaption>三個設定來源疊在一起時，環境變數蓋過設定檔、設定檔蓋過內建預設值；唯一的例外是只負責綁定 session 名稱的 <code>PLAYWRIGHT_CLI_SESSION</code>。</figcaption></figure><h2>常見踩雷</h2><ul><li>改了 config 但檔案不在預設的 <code>.playwright/cli.config.json</code>，又沒帶 <code>--config</code> → 設定沒生效。</li><li>把環境變數前綴打成 <code>PLAYWRIGHT_CLI_*</code>（除了 <code>PLAYWRIGHT_CLI_SESSION</code>）→ 不會報錯，只是沒作用。</li><li>在無顯示的遠端 shell / 容器裡把 <code>headless</code> 關掉 → 啟動失敗。headless 是預設，通常別動。</li></ul><h2>下一步</h2><p>設定就位後，<a href="/ch06-agent-setup">第 6 章</a> 帶你在 Claude Code / Codex 裡跑一次 smoke test，確認 skill 被讀到、瀏覽器起得來。</p></div><nav class="cnav" data-astro-cid-ccykbmgk><a href="/playwright-cli/ch04-install" class="prev" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>← 上一章</span><span class="nt" data-astro-cid-ccykbmgk>安裝：CLI 本體與 skills 兩層模型</span></a><a href="/playwright-cli/ch06-agent-setup" class="next" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>下一章 →</span><span class="nt" data-astro-cid-ccykbmgk>在 Claude Code / Codex 裡啟用 skill 並驗證</span></a></nav></main></div><script>
+    // Theme
+    const html = document.documentElement;
+    const tt = document.getElementById('tt');
+    const isun = document.getElementById('isun');
+    const imoon = document.getElementById('imoon');
+    function syncIcons() {
+      const dk = html.classList.contains('dark');
+      isun.style.display = dk ? 'block' : 'none';
+      imoon.style.display = dk ? 'none' : 'block';
+    }
+    syncIcons();
+    tt?.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('cc-theme', html.classList.contains('dark') ? 'dark' : 'light');
+      syncIcons();
+    });
+
+    // Progress
+    const pb = document.getElementById('pb');
+    window.addEventListener('scroll', () => {
+      const t = document.documentElement.scrollHeight - window.innerHeight;
+      pb.style.width = t > 0 ? `${(window.scrollY / t) * 100}%` : '0%';
+    }, { passive: true });
+
+    // Sidebar part toggles
+    document.querySelectorAll('.pt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.pid;
+        const list = document.querySelector(`[data-pl="${id}"]`);
+        btn.classList.toggle('open');
+        list?.classList.toggle('closed');
+      });
+    });
+
+    // Mobile menu
+    const sb = document.getElementById('sb');
+    const ov = document.getElementById('ov');
+    const mb = document.getElementById('mbtn');
+    const open = () => { sb.classList.add('open'); ov.classList.add('open'); document.body.style.overflow='hidden'; };
+    const close = () => { sb.classList.remove('open'); ov.classList.remove('open'); document.body.style.overflow=''; };
+    mb?.addEventListener('click', open);
+    ov?.addEventListener('click', close);
+  </script></body></html>

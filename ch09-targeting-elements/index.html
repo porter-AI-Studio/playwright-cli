@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="zh-TW" data-astro-cid-ccykbmgk><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>元素定位：ref、CSS selector、Playwright locator、find | Playwright CLI 完整指南</title><meta name="description" content="四種定位方式的取捨：snapshot ref、CSS selector、getByRole 等 Playwright locator，以及用 find 在大快照裡搜尋節點。"><link rel="icon" href="/playwright-cli/favicon.svg" type="image/svg+xml"><script>
+    (function () {
+      const s = localStorage.getItem('cc-theme');
+      const d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (s === 'dark' || (!s && d)) document.documentElement.classList.add('dark');
+    })();
+  </script><link rel="stylesheet" href="/playwright-cli/_astro/DocsLayout.jWWT8cTA.css"></head><body data-astro-cid-ccykbmgk><div id="pb" data-astro-cid-ccykbmgk></div><header data-astro-cid-ccykbmgk><div class="hi" data-astro-cid-ccykbmgk><div class="hl" data-astro-cid-ccykbmgk><button id="mbtn" class="ibtn" aria-label="選單" data-astro-cid-ccykbmgk><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" data-astro-cid-ccykbmgk></path></svg></button><a href="/playwright-cli/" class="site-name" data-astro-cid-ccykbmgk><span class="logo" data-astro-cid-ccykbmgk>PW</span>&nbsp;&nbsp;Playwright CLI 完整指南</a></div><div class="hr" data-astro-cid-ccykbmgk><button id="tt" class="ibtn" aria-label="切換主題" data-astro-cid-ccykbmgk><svg id="isun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728 0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" data-astro-cid-ccykbmgk></path></svg><svg id="imoon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 0 1 8.646 3.646 9.003 9.003 0 0 0 12 21a9.003 9.003 0 0 0 8.354-5.646z" data-astro-cid-ccykbmgk></path></svg></button></div></div></header><div id="layout" data-astro-cid-ccykbmgk><nav id="sb" data-astro-cid-ccykbmgk><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="0" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 0：前言</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="0" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/preface" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>0.</span><span data-astro-cid-ccykbmgk>前言</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="1" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 1：認識 Playwright CLI</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="1" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch01-what-is-playwright-cli" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>1.</span><span data-astro-cid-ccykbmgk>Playwright CLI 是什麼，以及為什麼 AI agent 需要它</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch02-cli-vs-mcp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>2.</span><span data-astro-cid-ccykbmgk>Playwright CLI vs Playwright MCP：token 經濟學與選型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch03-terminology" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>3.</span><span data-astro-cid-ccykbmgk>釐清「Playwright CLI」的兩種意思：npx playwright 與 @playwright/cli</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="2" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 2：安裝與環境設定</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="2" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch04-install" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>4.</span><span data-astro-cid-ccykbmgk>安裝：CLI 本體與 skills 兩層模型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch05-browsers-config" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>5.</span><span data-astro-cid-ccykbmgk>瀏覽器安裝、設定檔與環境變數</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch06-agent-setup" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>6.</span><span data-astro-cid-ccykbmgk>在 Claude Code / Codex 裡啟用 skill 並驗證</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="3" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 3：核心操作模型</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="3" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch07-snapshot-ref-loop" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>7.</span><span data-astro-cid-ccykbmgk>Snapshot → ref → 操作：核心迴圈</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch08-command-reference" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>8.</span><span data-astro-cid-ccykbmgk>完整指令參考：Core / Navigation / Storage / Network / DevTools</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch09-targeting-elements" class="active" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>9.</span><span data-astro-cid-ccykbmgk>元素定位：ref、CSS selector、Playwright locator、find</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch10-sessions-storage" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>10.</span><span data-astro-cid-ccykbmgk>命名 session、persistent profile 與 storage state</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="4" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 4：進階能力</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="4" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch11-network-mock" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>11.</span><span data-astro-cid-ccykbmgk>網路攔截與 Mock：route / unroute</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch12-codegen-recording" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>12.</span><span data-astro-cid-ccykbmgk>codegen、recording、tracing 與 video</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch13-attach-cdp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>13.</span><span data-astro-cid-ccykbmgk>attach 既有瀏覽器：CDP、extension 與視覺儀表板</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch14-test-generation" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>14.</span><span data-astro-cid-ccykbmgk>測試生成：plan / generate / heal</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="5" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 5：AI Agent 實戰工作流</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="5" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch15-exploratory-testing" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>15.</span><span data-astro-cid-ccykbmgk>用 Claude Code + Playwright CLI 做探索性測試</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch16-e2e-from-spec" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>16.</span><span data-astro-cid-ccykbmgk>從測試案例 / charter 到 Playwright 測試檔</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch17-freeze-to-script" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>17.</span><span data-astro-cid-ccykbmgk>把探索流程固化成腳本，省下 AI token</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch18-pitfalls-faq" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>18.</span><span data-astro-cid-ccykbmgk>踩雷、疑難排解與 FAQ</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="6" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 6：附錄</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="6" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/about" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>19.</span><span data-astro-cid-ccykbmgk>關於本書與資料來源</span></a></li></ul></div></nav><div id="ov" data-astro-cid-ccykbmgk></div><main data-astro-cid-ccykbmgk><div class="cb" data-astro-cid-ccykbmgk><p class="clabel">第 9 章 · Part 3：核心操作模型</p><h1>元素定位：ref、CSS selector、Playwright locator、find</h1><p class="cdesc">預設用 ref，但另外三種在特定場景更穩、更適合寫進腳本。</p><h2>四種方式一次看</h2><table><thead><tr><th>方式</th><th>長相</th><th>適合</th><th>風險</th></tr></thead><tbody><tr><td>snapshot ref</td><td><code>click e15</code></td><td>agent 即時互動、探索</td><td>短命，頁面變動就失效，跨 run 不穩</td></tr><tr><td>CSS selector</td><td><code>click "#main &gt; button.submit"</code></td><td>結構穩定的頁面、你很熟 DOM 時</td><td>SPA / A/B test / 改版下脆弱</td></tr><tr><td>Playwright locator</td><td><code>click "getByRole('button', &#123; name: 'Submit' &#125;)"</code></td><td>寫進腳本、要跨 run 穩定</td><td>需要頁面有語意化 role / label</td></tr><tr><td><code>find</code></td><td><code>find "Add to cart"</code></td><td>在大快照裡先定位、再取 ref</td><td>是搜尋不是操作，仍要回到 ref</td></tr></tbody></table><h2>ref：預設，但不要硬記</h2><p>沒特別指定時，就用 snapshot 裡的 ref 操作。它的好處是你不用寫脆弱的 CSS 路徑；壞處是它只對「產生它的那份 snapshot」有效。 規則很簡單：<strong>先 snapshot，再用當下的 ref</strong>，操作後若頁面變了就重新 snapshot。細節見 <a href="/ch07-snapshot-ref-loop">第 7 章</a>。</p><h2>CSS selector 與 Playwright locator</h2><p>ref 之外，<code>click</code> / <code>fill</code> 這些指令也吃 CSS selector 和 Playwright locator 字串：</p><pre><code># CSS selector
+playwright-cli click "#main &gt; button.submit"
+
+# role locator（跨 run 穩定，推薦寫進腳本）
+playwright-cli click "getByRole('button', &#123; name: 'Submit' &#125;)"
+
+# test id
+playwright-cli click "getByTestId('submit-button')"</code></pre><p><code>getByTestId</code> 對應的屬性名預設是 <code>data-testid</code>，可用設定檔的 <code>testIdAttribute</code> 或環境變數<code>PLAYWRIGHT_MCP_TEST_ID_ATTRIBUTE</code> 改。</p><div class="call tip"><span class="ci">💡</span><div><strong>探索用 ref，固化用 locator</strong><p>agent 邊探索邊操作時用 ref 最省事；等流程要寫成可重複執行的腳本，把關鍵步驟換成 <code>getByRole</code> / <code>getByTestId</code>——它們不會因為一次 re-render 就失效。這條分界貫穿 <a href="/ch16-e2e-from-spec">第 16 章</a> 與 <a href="/ch17-freeze-to-script">第 17 章</a>。</p></div></div><h2>generate-locator：把 ref 轉成穩定 locator</h2><p>探索時你手上是 <code>e12</code>，要寫進腳本時可以請 CLI 幫你轉：</p><pre><code>playwright-cli generate-locator e12
+# 輸出類似：
+#   page.getByRole('link', &#123; name: 'TypeScript' &#125;)</code></pre><p>這是「用 ref 探索、用 locator 落地」最直接的橋。Playwright 的 codegen / recording 也偏好產生<code>getByRole</code>、<code>getByText</code> 這類語意化定位，原因相同：避開脆弱的 CSS 路徑。</p><figure class="svg-fig">
+<svg viewBox="0 0 800 190" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-ch09-main" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--border)" />
+    </marker>
+  </defs>
+  <g font-family="system-ui, sans-serif">
+    <text x="400" y="30" text-anchor="middle" font-size="19px" font-weight="bold" fill="var(--text)">從探索到固化：定位方式的轉換路徑</text>
+
+    <rect x="40" y="60" width="190" height="100" rx="8" fill="rgba(59,130,246,0.08)" stroke="#3b82f6" stroke-width="2" />
+    <text x="135" y="90" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">① 取得 ref</text>
+    <text x="135" y="112" text-anchor="middle" font-size="14px" fill="var(--muted)">snapshot → click e12</text>
+    <text x="135" y="134" text-anchor="middle" font-size="14px" fill="#ef4444">⚠ 短命，重整即失效</text>
+
+    <path d="M 230 110 L 297 110" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch09-main)" />
+
+    <rect x="305" y="60" width="190" height="100" rx="8" fill="rgba(139,92,246,0.08)" stroke="#8b5cf6" stroke-width="2" />
+    <text x="400" y="90" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">② 轉換 locator</text>
+    <text x="400" y="112" text-anchor="middle" font-size="14px" fill="var(--muted)">generate-locator e12</text>
+    <text x="400" y="134" text-anchor="middle" font-size="14px" fill="var(--muted)">CLI 自動產生</text>
+
+    <path d="M 495 110 L 562 110" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch09-main)" />
+
+    <rect x="570" y="60" width="190" height="100" rx="8" fill="rgba(16,185,129,0.08)" stroke="#10b981" stroke-width="2" />
+    <text x="665" y="90" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">③ 固化 locator</text>
+    <text x="665" y="112" text-anchor="middle" font-size="14px" fill="var(--muted)">getByRole / getByTestId</text>
+    <text x="665" y="134" text-anchor="middle" font-size="14px" fill="#10b981">✅ 跨 run 穩定</text>
+  </g>
+</svg>
+<figcaption>探索階段用 snapshot 取得的 ref 短命但省事；要寫進可重複執行的腳本時，用 <code>generate-locator</code> 把它轉成 <code>getByRole</code> / <code>getByTestId</code> 這類跨 run 穩定的 locator。</figcaption></figure><h2>用 find 縮小範圍</h2><p>快照很大時，先用 <code>find</code> 把範圍縮到你要的區域，再從命中結果取 ref：</p><pre><code>playwright-cli find "結帳"
+playwright-cli find --regex "/add to (cart|bag)/i"</code></pre><p>它回傳的是匹配節點加上下文，不會把整份快照吐給你——省 token，也讓 agent 更快鎖定目標。</p><h2>常見踩雷</h2><ul><li>在動態頁面上重複使用舊 ref → 先重新 <code>snapshot</code>。</li><li>用 CSS selector 選到會隨 A/B test 或 render 改變的 class → 改用 role / testId。</li><li>locator 字串裡的引號跟外層 shell 引號打架 → 內外用不同引號，或把複雜字串寫進檔案用 <code>run-code --filename</code>。</li></ul><h2>下一步</h2><p>定位方式清楚後，<a href="/ch10-sessions-storage">第 10 章</a> 處理「同時開多個瀏覽器、保存登入態」——命名 session、persistent profile 與 storage state。</p></div><nav class="cnav" data-astro-cid-ccykbmgk><a href="/playwright-cli/ch08-command-reference" class="prev" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>← 上一章</span><span class="nt" data-astro-cid-ccykbmgk>完整指令參考：Core / Navigation / Storage / Network / DevTools</span></a><a href="/playwright-cli/ch10-sessions-storage" class="next" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>下一章 →</span><span class="nt" data-astro-cid-ccykbmgk>命名 session、persistent profile 與 storage state</span></a></nav></main></div><script>
+    // Theme
+    const html = document.documentElement;
+    const tt = document.getElementById('tt');
+    const isun = document.getElementById('isun');
+    const imoon = document.getElementById('imoon');
+    function syncIcons() {
+      const dk = html.classList.contains('dark');
+      isun.style.display = dk ? 'block' : 'none';
+      imoon.style.display = dk ? 'none' : 'block';
+    }
+    syncIcons();
+    tt?.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('cc-theme', html.classList.contains('dark') ? 'dark' : 'light');
+      syncIcons();
+    });
+
+    // Progress
+    const pb = document.getElementById('pb');
+    window.addEventListener('scroll', () => {
+      const t = document.documentElement.scrollHeight - window.innerHeight;
+      pb.style.width = t > 0 ? `${(window.scrollY / t) * 100}%` : '0%';
+    }, { passive: true });
+
+    // Sidebar part toggles
+    document.querySelectorAll('.pt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.pid;
+        const list = document.querySelector(`[data-pl="${id}"]`);
+        btn.classList.toggle('open');
+        list?.classList.toggle('closed');
+      });
+    });
+
+    // Mobile menu
+    const sb = document.getElementById('sb');
+    const ov = document.getElementById('ov');
+    const mb = document.getElementById('mbtn');
+    const open = () => { sb.classList.add('open'); ov.classList.add('open'); document.body.style.overflow='hidden'; };
+    const close = () => { sb.classList.remove('open'); ov.classList.remove('open'); document.body.style.overflow=''; };
+    mb?.addEventListener('click', open);
+    ov?.addEventListener('click', close);
+  </script></body></html>

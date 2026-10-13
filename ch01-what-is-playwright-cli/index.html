@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="zh-TW" data-astro-cid-ccykbmgk><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Playwright CLI 是什麼，以及為什麼 AI agent 需要它 | Playwright CLI 完整指南</title><meta name="description" content="認識 Playwright CLI（@playwright/cli）：Microsoft 為 coding agent 打造的命令列瀏覽器自動化工具。它把快照與截圖存到磁碟、只回傳檔案路徑，讓 agent 自己決定要讀什麼，因此比 Playwright MCP 省下大量 token。"><link rel="icon" href="/playwright-cli/favicon.svg" type="image/svg+xml"><script>
+    (function () {
+      const s = localStorage.getItem('cc-theme');
+      const d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (s === 'dark' || (!s && d)) document.documentElement.classList.add('dark');
+    })();
+  </script><link rel="stylesheet" href="/playwright-cli/_astro/DocsLayout.jWWT8cTA.css"></head><body data-astro-cid-ccykbmgk><div id="pb" data-astro-cid-ccykbmgk></div><header data-astro-cid-ccykbmgk><div class="hi" data-astro-cid-ccykbmgk><div class="hl" data-astro-cid-ccykbmgk><button id="mbtn" class="ibtn" aria-label="選單" data-astro-cid-ccykbmgk><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" data-astro-cid-ccykbmgk></path></svg></button><a href="/playwright-cli/" class="site-name" data-astro-cid-ccykbmgk><span class="logo" data-astro-cid-ccykbmgk>PW</span>&nbsp;&nbsp;Playwright CLI 完整指南</a></div><div class="hr" data-astro-cid-ccykbmgk><button id="tt" class="ibtn" aria-label="切換主題" data-astro-cid-ccykbmgk><svg id="isun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728 0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" data-astro-cid-ccykbmgk></path></svg><svg id="imoon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 0 1 8.646 3.646 9.003 9.003 0 0 0 12 21a9.003 9.003 0 0 0 8.354-5.646z" data-astro-cid-ccykbmgk></path></svg></button></div></div></header><div id="layout" data-astro-cid-ccykbmgk><nav id="sb" data-astro-cid-ccykbmgk><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="0" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 0：前言</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="0" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/preface" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>0.</span><span data-astro-cid-ccykbmgk>前言</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="1" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 1：認識 Playwright CLI</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="1" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch01-what-is-playwright-cli" class="active" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>1.</span><span data-astro-cid-ccykbmgk>Playwright CLI 是什麼，以及為什麼 AI agent 需要它</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch02-cli-vs-mcp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>2.</span><span data-astro-cid-ccykbmgk>Playwright CLI vs Playwright MCP：token 經濟學與選型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch03-terminology" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>3.</span><span data-astro-cid-ccykbmgk>釐清「Playwright CLI」的兩種意思：npx playwright 與 @playwright/cli</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="2" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 2：安裝與環境設定</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="2" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch04-install" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>4.</span><span data-astro-cid-ccykbmgk>安裝：CLI 本體與 skills 兩層模型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch05-browsers-config" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>5.</span><span data-astro-cid-ccykbmgk>瀏覽器安裝、設定檔與環境變數</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch06-agent-setup" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>6.</span><span data-astro-cid-ccykbmgk>在 Claude Code / Codex 裡啟用 skill 並驗證</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="3" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 3：核心操作模型</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="3" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch07-snapshot-ref-loop" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>7.</span><span data-astro-cid-ccykbmgk>Snapshot → ref → 操作：核心迴圈</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch08-command-reference" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>8.</span><span data-astro-cid-ccykbmgk>完整指令參考：Core / Navigation / Storage / Network / DevTools</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch09-targeting-elements" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>9.</span><span data-astro-cid-ccykbmgk>元素定位：ref、CSS selector、Playwright locator、find</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch10-sessions-storage" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>10.</span><span data-astro-cid-ccykbmgk>命名 session、persistent profile 與 storage state</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="4" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 4：進階能力</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="4" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch11-network-mock" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>11.</span><span data-astro-cid-ccykbmgk>網路攔截與 Mock：route / unroute</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch12-codegen-recording" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>12.</span><span data-astro-cid-ccykbmgk>codegen、recording、tracing 與 video</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch13-attach-cdp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>13.</span><span data-astro-cid-ccykbmgk>attach 既有瀏覽器：CDP、extension 與視覺儀表板</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch14-test-generation" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>14.</span><span data-astro-cid-ccykbmgk>測試生成：plan / generate / heal</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="5" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 5：AI Agent 實戰工作流</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="5" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch15-exploratory-testing" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>15.</span><span data-astro-cid-ccykbmgk>用 Claude Code + Playwright CLI 做探索性測試</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch16-e2e-from-spec" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>16.</span><span data-astro-cid-ccykbmgk>從測試案例 / charter 到 Playwright 測試檔</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch17-freeze-to-script" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>17.</span><span data-astro-cid-ccykbmgk>把探索流程固化成腳本，省下 AI token</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch18-pitfalls-faq" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>18.</span><span data-astro-cid-ccykbmgk>踩雷、疑難排解與 FAQ</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="6" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 6：附錄</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="6" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/about" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>19.</span><span data-astro-cid-ccykbmgk>關於本書與資料來源</span></a></li></ul></div></nav><div id="ov" data-astro-cid-ccykbmgk></div><main data-astro-cid-ccykbmgk><div class="cb" data-astro-cid-ccykbmgk><p class="clabel">第 1 章 · Part 1：認識 Playwright CLI</p><h1>Playwright CLI 是什麼，以及為什麼 AI agent 需要它</h1><p class="cdesc">一個把「讓 AI 看見並操作瀏覽器」這件事，重新設計成「一連串省 token 的 shell 指令」的工具。</p><h2>一句話定義</h2><p><strong>Playwright CLI</strong>（npm 套件名 <code>@playwright/cli</code>，可執行檔名 <code>playwright-cli</code>）是 Microsoft 在 2026 年初推出的命令列瀏覽器自動化工具，<strong>專門為 coding agent 設計</strong>。它跟既有的<a href="https://github.com/microsoft/playwright-mcp" target="_blank" rel="noopener noreferrer">Playwright MCP</a>出自同一個團隊、底下是同一顆 Playwright 引擎，差別在於「怎麼把瀏覽器的狀態餵給模型」。</p><p>Playwright MCP 走的是<a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">Model Context Protocol</a>——一個 JSON 格式的 AI ↔ 工具通訊標準；Playwright CLI 則直接是 shell 指令，你的 agent（Claude Code、GitHub Copilot、Codex、Cursor……） 透過 Bash 工具呼叫它，就像呼叫 <code>git</code> 或 <code>npm</code> 一樣。</p><div class="call info"><span class="ci">ℹ️</span><div><strong>官方定位：companion，不是取代</strong><p>官方把 Playwright CLI 描述成 Playwright MCP 的「companion」（伴隨工具），不是要取代它。兩者的取捨會在 <a href="/ch02-cli-vs-mcp">第 2 章</a> 完整展開；簡短版是：<em>有 filesystem 和 shell 的 coding agent 用 CLI，沙盒環境或需要 MCP 協定的自動化用 MCP。</em></p></div></div><h2>為什麼 AI agent 需要它：context window 是一筆有限的預算</h2><p>每個 AI coding agent 都活在一個 <strong>context window</strong> 裡——一筆固定的 token 預算，同時裝著對話歷史、 你打開的程式碼檔案、工具的輸出、還有模型推理需要的一切。這筆預算一旦見底，session 就開始遺忘前面的內容、 甚至直接中斷。</p><p>用 Playwright MCP 驅動瀏覽器時，每navigate到一個內容豐富的頁面，一次 <code>browser_navigate</code> 就可能回傳 數千 token 的 accessibility tree；每截一張圖，整張圖的位元組都會變成 token 灌回 context。一個多步驟的自動化流程跑下來， 這些量疊加得非常快。對「context 已經塞滿原始碼、測試結果和對話」的 coding agent 來說，這不是小小的最佳化問題， 而是「這個 session 到底跑不跑得完」的差別。</p><h2>核心設計：資料存磁碟，不進 context</h2><p>Playwright CLI 的關鍵設計只有一句話：<strong>把東西存到磁碟，讓 coding agent 自己決定要讀什麼。</strong></p><p>從模型的角度看，每個指令都很小、而且幾乎沒有狀態：</p><ul><li>跑 <code>playwright-cli snapshot</code>，得到一份精簡的 YAML 檔，裡面是帶著 <code>e21</code>、<code>e35</code> 這類引用（ref）的元素樹。</li><li>跑 <code>playwright-cli click e21</code>，用 ref 操作某個元素。</li><li>跑 <code>playwright-cli screenshot</code>，把一張圖存到磁碟。</li></ul><p>在這整個過程裡，<strong>完整的頁面 DOM 和圖片二進位從來不會被塞進模型的 context</strong>——除非 agent 自己明確去讀那些檔案。 指令回傳的通常只是一行檔案路徑加一句確認訊息。</p><div style="border:1px solid var(--border);border-radius:12px;padding:1.5rem;background:var(--bg2);margin:1.5rem 0;font-size:.85rem"><div style="display:flex;flex-direction:column;align-items:center;gap:.55rem;font-family:var(--mono)"><div style="padding:.45rem 1.4rem;background:var(--accent);color:#fff;border-radius:8px;font-weight:600">agent 下指令：playwright-cli snapshot</div><div style="color:var(--muted);font-size:.8rem">↓</div><div style="padding:.45rem 1.4rem;border:2px solid var(--accent);border-radius:8px;color:var(--text);background:var(--bg);font-weight:600">頁面完整結構 → 寫成 .playwright-cli/page-xxxx.yml</div><div style="color:var(--muted);font-size:.8rem">↓ 回傳給 agent 的只有這一行</div><div style="padding:.45rem 1.4rem;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text)">「Snapshot 已存到 page-xxxx.yml」＋當前 URL / title</div><div style="color:var(--muted);font-size:.8rem">↓ agent 自己決定</div><div style="padding:.45rem 1.4rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.8rem">要嘛整份讀進來、要嘛用 find 只搜需要的節點、要嘛根本不讀</div></div></div><h2>一次真實的操作長什麼樣</h2><p>下面是一段自動化 TodoMVC 範例站的 session——正是 coding agent 在做測試時會跑的那種流程：</p><pre><code># 開瀏覽器（預設 headless；加 --headed 可以看到畫面）
+playwright-cli open https://demo.playwright.dev/todomvc/ --headed
+
+# 取一份快照，拿到元素 ref
+playwright-cli snapshot
+# 快照存成 YAML 檔，內容像這樣（精簡的元素樹）：
+#   - textbox "What needs to be done?" [ref=e8]
+#   - checkbox "Toggle Todo" [ref=e21]
+
+# 新增幾筆待辦
+playwright-cli fill e8 "Write Playwright tests"
+playwright-cli press Enter
+playwright-cli fill e8 "Review test coverage"
+playwright-cli press Enter
+
+# 勾掉第一筆
+playwright-cli check e21
+
+# 截圖存證
+playwright-cli screenshot
+# 已存：.playwright-cli/page-2026-02-12T05-27-11-604Z.png</code></pre><p>注意每個指令回傳的東西都很小——一行檔案路徑、一句確認。agent 從頭到尾沒有處理過一份一萬 token 的 accessibility tree，也沒有把一張五萬 token 的截圖吃進 context。它拿到的是 <code>e8</code>、<code>e21</code> 這種精簡引用，直接拿來用。</p><div class="call tip"><span class="ci">💡</span><div><strong>連 skill 都不裝也能用</strong><p>Playwright CLI 有一組給 agent 讀的 skill 檔（<a href="/ch04-install">第 4 章</a>），但就算不裝，也能直接叫 agent：<code>用 playwright-cli 測試 https://demo.playwright.dev/todomvc 的「新增待辦」流程，先看 playwright-cli --help 有哪些指令。</code> agent 會自己讀 <code>--help</code> 學會怎麼用。</p></div></div><h2>token 帳單：官方 benchmark 說了什麼</h2><p>Playwright 團隊自己的 benchmark 顯示，一個典型的瀏覽器自動化任務：</p><table><thead><tr><th>方式</th><th>該任務的 token 消耗</th><th>相對倍數</th></tr></thead><tbody><tr><td>Playwright MCP</td><td>約 114,000 tokens</td><td>基準</td></tr><tr><td>Playwright CLI</td><td>約 27,000 tokens</td><td>約 <strong>1/4</strong></td></tr></tbody></table><p>差距主要來自兩件事：</p><ul><li><strong>快照存檔，不隨回應內嵌。</strong>MCP 導航到頁面時，會把完整的 accessibility 快照放在工具回應裡回傳——就算 agent 只需要找一顆按鈕。 CLI 把快照存成磁碟上的 YAML，回應裡只有一行路徑，agent 可以選擇讀、或不讀。</li><li><strong>截圖永遠不進 context。</strong>MCP 下模型要一張截圖，圖的位元組就會進 context window。CLI 把截圖存成<code>.playwright-cli/</code> 裡的 PNG；如果任務只是「截圖存檔」（測試流程裡很常見），模型根本不需要看到那些像素。</li></ul><figure class="svg-fig">
+<svg viewBox="0 0 800 370" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-ch01-warn" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ef4444" />
+    </marker>
+    <marker id="arr-ch01-good" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#10b981" />
+    </marker>
+  </defs>
+
+  <g font-family="system-ui, sans-serif">
+
+    <!-- 欄位標題 -->
+    <text x="225" y="35" text-anchor="middle" font-size="19px" font-weight="bold" fill="var(--muted)">Playwright MCP：內嵌回應</text>
+    <text x="575" y="35" text-anchor="middle" font-size="19px" font-weight="bold" fill="var(--accent)">Playwright CLI：只回傳路徑</text>
+
+    <!-- 中間分隔虛線 -->
+    <line x1="400" y1="20" x2="400" y2="350" stroke="var(--border)" stroke-width="2" stroke-dasharray="4 4" />
+
+    <!-- 左欄：MCP，第一步 -->
+    <rect x="75" y="60" width="300" height="70" rx="8" fill="rgba(239,68,68,0.07)" stroke="#ef4444" stroke-width="2" />
+    <text x="225" y="88" text-anchor="middle" font-weight="bold" font-size="17px" fill="var(--text)">browser_navigate 呼叫</text>
+    <text x="225" y="110" text-anchor="middle" font-size="15px" fill="var(--muted)">完整 accessibility tree 內嵌回應</text>
+
+    <path d="M 225 130 L 225 162" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arr-ch01-warn)" />
+    <text x="225" y="150" text-anchor="middle" font-size="14px" fill="#ef4444">數千 token 直接灌進 context</text>
+
+    <!-- 左欄：MCP，第二步 -->
+    <rect x="75" y="170" width="300" height="70" rx="8" fill="rgba(239,68,68,0.07)" stroke="#ef4444" stroke-width="2" />
+    <text x="225" y="198" text-anchor="middle" font-weight="bold" font-size="17px" fill="var(--text)">screenshot 截圖需求</text>
+    <text x="225" y="220" text-anchor="middle" font-size="15px" fill="var(--muted)">圖片位元組本身變成 token</text>
+
+    <path d="M 225 240 L 225 262" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arr-ch01-warn)" />
+
+    <!-- 左欄：token 帳單 -->
+    <rect x="75" y="270" width="300" height="70" rx="8" fill="rgba(239,68,68,0.07)" stroke="#ef4444" stroke-width="2" />
+    <text x="225" y="305" text-anchor="middle" font-weight="bold" font-size="19px" fill="#ef4444">約 114,000 tokens</text>
+    <text x="225" y="328" text-anchor="middle" font-size="15px" fill="var(--muted)">官方 benchmark 基準值</text>
+
+    <!-- 右欄：CLI，第一步 -->
+    <rect x="425" y="60" width="300" height="70" rx="8" fill="rgba(16,185,129,0.07)" stroke="#10b981" stroke-width="2" />
+    <text x="575" y="88" text-anchor="middle" font-weight="bold" font-size="17px" fill="var(--text)">playwright-cli snapshot</text>
+    <text x="575" y="110" text-anchor="middle" font-size="15px" fill="var(--muted)">存成 YAML 檔，只回傳一行路徑</text>
+
+    <path d="M 575 130 L 575 162" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arr-ch01-good)" />
+    <text x="575" y="150" text-anchor="middle" font-size="14px" fill="#10b981">路徑 + 一句確認訊息</text>
+
+    <!-- 右欄：CLI，第二步 -->
+    <rect x="425" y="170" width="300" height="70" rx="8" fill="rgba(16,185,129,0.07)" stroke="#10b981" stroke-width="2" />
+    <text x="575" y="198" text-anchor="middle" font-weight="bold" font-size="17px" fill="var(--text)">playwright-cli screenshot</text>
+    <text x="575" y="220" text-anchor="middle" font-size="15px" fill="var(--muted)">PNG 存到 .playwright-cli/ 資料夾</text>
+
+    <path d="M 575 240 L 575 262" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arr-ch01-good)" />
+
+    <!-- 右欄：token 帳單 -->
+    <rect x="425" y="270" width="300" height="70" rx="8" fill="rgba(16,185,129,0.07)" stroke="#10b981" stroke-width="2" />
+    <text x="575" y="305" text-anchor="middle" font-weight="bold" font-size="19px" fill="#10b981">約 27,000 tokens</text>
+    <text x="575" y="328" text-anchor="middle" font-size="15px" fill="var(--muted)">約為 MCP 的 1/4</text>
+
+  </g>
+</svg>
+<figcaption>左邊是 Playwright MCP 把完整 accessibility tree 與截圖位元組都塞進工具回應、直接吃掉 context；右邊是 Playwright CLI 把同樣的資料存到磁碟、回應只留一行路徑，這正是官方 benchmark 中兩者相差約 4 倍 token 的關鍵原因。</figcaption></figure><div class="call warn"><span class="ci">⚠️</span><div><strong>「Playwright CLI」有兩種意思，別搞混</strong><p>2026 年以前，很多文章講的「Playwright CLI」指的是 <code>@playwright/test</code> 內建的 <code>npx playwright screenshot</code> / <code>codegen</code> / <code>open</code> 這組子指令。本書講的是 2026 年新出的 <code>@playwright/cli</code>——一套獨立套件，有自己的 snapshot / ref / session / dashboard / skills。兩者安裝方式與指令名稱都不同，照抄舊教學會踩雷。完整釐清見 <a href="/ch03-terminology">第 3 章</a>。</p></div></div><h2>它不是什麼</h2><ul><li><strong>不是 <code>@playwright/test</code> 測試 runner。</strong><code>npx playwright test</code> 是拿 spec 檔跑測試套件的；<code>playwright-cli</code> 是跨多次終端呼叫、操控一個活著的瀏覽器。一個專案可以同時裝 <code>@playwright/test</code> 和 <code>@playwright/cli</code>。</li><li><strong>不是你的測試框架的替代品。</strong>它讓 AI coding agent 在「開發與除錯階段」更會操作瀏覽器——產生 E2E 測試草稿、診斷 UI bug、做探索性測試——正式的回歸測試還是交給測試框架跑。</li><li><strong>不是要跟 Playwright MCP 二選一。</strong>常見用法是混搭：探索階段用 MCP 邊看邊想，流程確定後用 CLI 固化成可重複執行的腳本（<a href="/ch17-freeze-to-script">第 17 章</a>）。</li></ul><h2>需要準備什麼</h2><p>門檻很低：</p><pre><code># 需要 Node.js 18 以上（部分官方文件寫 20+）
+node --version
+
+# 全域安裝
+npm install -g @playwright/cli@latest
+
+# 驗證，順便讓 agent 看得到指令清單
+playwright-cli --help</code></pre><p>第一次跑 <code>playwright-cli open</code> 時會自動下載瀏覽器，通常不需要另外裝。完整的安裝流程、skill 安裝、 以及在 Claude Code / Codex 裡的驗證步驟，分別在 <a href="/ch04-install">第 4 章</a> 到 <a href="/ch06-agent-setup">第 6 章</a>。</p><div class="call info"><span class="ci">ℹ️</span><div><strong>本書對應的版本</strong><p><code>@playwright/cli</code> 仍在 <code>0.1.x</code> 快速演進中（本書寫作時約 <code>v0.1.19</code>，2026 年 9 月）。指令面在小版本之間持續擴充，書中若某個指令跟你手上的版本對不上，請以 <code>playwright-cli --help</code> 的實際輸出為準。</p></div></div><h2>這本書怎麼讀</h2><p><strong>Part 1</strong>（本章～第 3 章）建立整體概念與選型判斷；<strong>Part 2</strong> 帶你把工具與 skill 裝好、在 agent 裡驗證；<strong>Part 3</strong> 拆解 snapshot → ref → 操作的核心迴圈與完整指令表；<strong>Part 4</strong> 進到網路 Mock、錄製、attach 既有瀏覽器、測試生成等進階能力；<strong>Part 5</strong> 是實戰工作流——探索性測試、從測試案例產出 Playwright 測試檔、把流程固化成腳本，以及踩雷與 FAQ。</p><p>如果你只想先跑起來，直接跳 <a href="/ch04-install">第 4 章</a>；如果你在猶豫該用 CLI 還是 MCP，先看 <a href="/ch02-cli-vs-mcp">第 2 章</a>。</p></div><nav class="cnav" data-astro-cid-ccykbmgk><a href="/playwright-cli/preface" class="prev" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>← 上一章</span><span class="nt" data-astro-cid-ccykbmgk>前言</span></a><a href="/playwright-cli/ch02-cli-vs-mcp" class="next" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>下一章 →</span><span class="nt" data-astro-cid-ccykbmgk>Playwright CLI vs Playwright MCP：token 經濟學與選型</span></a></nav></main></div><script>
+    // Theme
+    const html = document.documentElement;
+    const tt = document.getElementById('tt');
+    const isun = document.getElementById('isun');
+    const imoon = document.getElementById('imoon');
+    function syncIcons() {
+      const dk = html.classList.contains('dark');
+      isun.style.display = dk ? 'block' : 'none';
+      imoon.style.display = dk ? 'none' : 'block';
+    }
+    syncIcons();
+    tt?.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('cc-theme', html.classList.contains('dark') ? 'dark' : 'light');
+      syncIcons();
+    });
+
+    // Progress
+    const pb = document.getElementById('pb');
+    window.addEventListener('scroll', () => {
+      const t = document.documentElement.scrollHeight - window.innerHeight;
+      pb.style.width = t > 0 ? `${(window.scrollY / t) * 100}%` : '0%';
+    }, { passive: true });
+
+    // Sidebar part toggles
+    document.querySelectorAll('.pt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.pid;
+        const list = document.querySelector(`[data-pl="${id}"]`);
+        btn.classList.toggle('open');
+        list?.classList.toggle('closed');
+      });
+    });
+
+    // Mobile menu
+    const sb = document.getElementById('sb');
+    const ov = document.getElementById('ov');
+    const mb = document.getElementById('mbtn');
+    const open = () => { sb.classList.add('open'); ov.classList.add('open'); document.body.style.overflow='hidden'; };
+    const close = () => { sb.classList.remove('open'); ov.classList.remove('open'); document.body.style.overflow=''; };
+    mb?.addEventListener('click', open);
+    ov?.addEventListener('click', close);
+  </script></body></html>

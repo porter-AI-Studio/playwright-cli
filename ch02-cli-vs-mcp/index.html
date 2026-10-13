@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="zh-TW" data-astro-cid-ccykbmgk><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Playwright CLI vs Playwright MCP：token 經濟學與選型 | Playwright CLI 完整指南</title><meta name="description" content="逐項比較 Playwright CLI 與 Playwright MCP 的架構差異、token 消耗、可用指令數與適用場景，並給出「探索用 MCP、固化用 CLI」的選型原則。"><link rel="icon" href="/playwright-cli/favicon.svg" type="image/svg+xml"><script>
+    (function () {
+      const s = localStorage.getItem('cc-theme');
+      const d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (s === 'dark' || (!s && d)) document.documentElement.classList.add('dark');
+    })();
+  </script><link rel="stylesheet" href="/playwright-cli/_astro/DocsLayout.jWWT8cTA.css"><style>.cb-wrap[data-astro-cid-c6nuo4je]{margin-bottom:1.25rem}.cb-bar[data-astro-cid-c6nuo4je]{background:#1a1a2e;border:1px solid #ffffff14;border-bottom-color:#ffffff0d;border-radius:6px 6px 0 0;justify-content:space-between;align-items:center;min-height:1.8rem;padding:.18rem .5rem .18rem .75rem;display:flex}.cb-label[data-astro-cid-c6nuo4je]{color:#a6adc8;letter-spacing:.04em;font-family:Fira Code,Cascadia Code,Consolas,monospace;font-size:.73rem}.cb-inner[data-astro-cid-c6nuo4je] pre{border-radius:0 0 8px 8px!important;margin-bottom:0!important}.cb-copy[data-astro-cid-c6nuo4je]{color:#888;cursor:pointer;background:#ffffff14;border:1px solid #ffffff1f;border-radius:4px;flex-shrink:0;padding:.15rem .55rem;font-size:.7rem;transition:all .15s}.cb-copy[data-astro-cid-c6nuo4je]:hover{color:#fff;background:#ffffff2e}.cb-copy[data-astro-cid-c6nuo4je].copied{color:#4ec9b0;border-color:#4ec9b0}
+</style></head><body data-astro-cid-ccykbmgk><div id="pb" data-astro-cid-ccykbmgk></div><header data-astro-cid-ccykbmgk><div class="hi" data-astro-cid-ccykbmgk><div class="hl" data-astro-cid-ccykbmgk><button id="mbtn" class="ibtn" aria-label="選單" data-astro-cid-ccykbmgk><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" data-astro-cid-ccykbmgk></path></svg></button><a href="/playwright-cli/" class="site-name" data-astro-cid-ccykbmgk><span class="logo" data-astro-cid-ccykbmgk>PW</span>&nbsp;&nbsp;Playwright CLI 完整指南</a></div><div class="hr" data-astro-cid-ccykbmgk><button id="tt" class="ibtn" aria-label="切換主題" data-astro-cid-ccykbmgk><svg id="isun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728 0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" data-astro-cid-ccykbmgk></path></svg><svg id="imoon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 0 1 8.646 3.646 9.003 9.003 0 0 0 12 21a9.003 9.003 0 0 0 8.354-5.646z" data-astro-cid-ccykbmgk></path></svg></button></div></div></header><div id="layout" data-astro-cid-ccykbmgk><nav id="sb" data-astro-cid-ccykbmgk><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="0" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 0：前言</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="0" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/preface" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>0.</span><span data-astro-cid-ccykbmgk>前言</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="1" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 1：認識 Playwright CLI</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="1" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch01-what-is-playwright-cli" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>1.</span><span data-astro-cid-ccykbmgk>Playwright CLI 是什麼，以及為什麼 AI agent 需要它</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch02-cli-vs-mcp" class="active" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>2.</span><span data-astro-cid-ccykbmgk>Playwright CLI vs Playwright MCP：token 經濟學與選型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch03-terminology" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>3.</span><span data-astro-cid-ccykbmgk>釐清「Playwright CLI」的兩種意思：npx playwright 與 @playwright/cli</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="2" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 2：安裝與環境設定</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="2" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch04-install" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>4.</span><span data-astro-cid-ccykbmgk>安裝：CLI 本體與 skills 兩層模型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch05-browsers-config" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>5.</span><span data-astro-cid-ccykbmgk>瀏覽器安裝、設定檔與環境變數</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch06-agent-setup" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>6.</span><span data-astro-cid-ccykbmgk>在 Claude Code / Codex 裡啟用 skill 並驗證</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="3" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 3：核心操作模型</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="3" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch07-snapshot-ref-loop" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>7.</span><span data-astro-cid-ccykbmgk>Snapshot → ref → 操作：核心迴圈</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch08-command-reference" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>8.</span><span data-astro-cid-ccykbmgk>完整指令參考：Core / Navigation / Storage / Network / DevTools</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch09-targeting-elements" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>9.</span><span data-astro-cid-ccykbmgk>元素定位：ref、CSS selector、Playwright locator、find</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch10-sessions-storage" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>10.</span><span data-astro-cid-ccykbmgk>命名 session、persistent profile 與 storage state</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="4" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 4：進階能力</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="4" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch11-network-mock" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>11.</span><span data-astro-cid-ccykbmgk>網路攔截與 Mock：route / unroute</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch12-codegen-recording" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>12.</span><span data-astro-cid-ccykbmgk>codegen、recording、tracing 與 video</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch13-attach-cdp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>13.</span><span data-astro-cid-ccykbmgk>attach 既有瀏覽器：CDP、extension 與視覺儀表板</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch14-test-generation" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>14.</span><span data-astro-cid-ccykbmgk>測試生成：plan / generate / heal</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="5" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 5：AI Agent 實戰工作流</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="5" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch15-exploratory-testing" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>15.</span><span data-astro-cid-ccykbmgk>用 Claude Code + Playwright CLI 做探索性測試</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch16-e2e-from-spec" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>16.</span><span data-astro-cid-ccykbmgk>從測試案例 / charter 到 Playwright 測試檔</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch17-freeze-to-script" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>17.</span><span data-astro-cid-ccykbmgk>把探索流程固化成腳本，省下 AI token</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch18-pitfalls-faq" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>18.</span><span data-astro-cid-ccykbmgk>踩雷、疑難排解與 FAQ</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="6" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 6：附錄</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="6" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/about" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>19.</span><span data-astro-cid-ccykbmgk>關於本書與資料來源</span></a></li></ul></div></nav><div id="ov" data-astro-cid-ccykbmgk></div><main data-astro-cid-ccykbmgk><div class="cb" data-astro-cid-ccykbmgk><p class="clabel">第 2 章 · Part 1：認識 Playwright CLI</p><h1>Playwright CLI vs Playwright MCP：token 經濟學與選型</h1><p class="cdesc">同一個團隊、同一顆 Playwright 引擎，兩種餵資料給模型的方式。</p><p>Playwright MCP 與 Playwright CLI 都是微軟官方維護的工具，底層跑的是同一顆 Playwright 引擎，做的事情也一樣——開瀏覽器、讀畫面、點按鈕。兩者的差別不在「能不能做」，而在一件很單純的事：<strong>AI 讀完一次畫面之後，那份內容放到哪裡去。</strong>這個差別聽起來很小，卻直接決定了一段對話能撐幾步、以及一個月的 token 帳單長什麼樣子。</p><h2>兩種架構：塞進對話 vs 存成檔案</h2><p>AI 每讀一次頁面，會拿到一份「這一頁有哪些按鈕、輸入框，各自叫什麼名字」的清單——複雜的頁面，這份清單可能長達數千字。兩邊處理這份清單的方式完全相反：</p><table><thead><tr><th>階段</th><th>Playwright MCP</th><th>Playwright CLI</th></tr></thead><tbody><tr><td>連線／啟動</td><td>先把全部工具（約 20 幾個）的 JSON schema 送進 context，才能開始對話</td><td>指令用法寫在一份精簡的 <code>SKILL.md</code> 裡，agent 讀一次就會用</td></tr><tr><td>取得畫面內容</td><td>accessibility tree 整份塞進 tool response，直接進入對話歷史</td><td>存成 <code>.playwright-cli/*.yml</code> 檔案，對話裡只留一行檔案路徑</td></tr><tr><td>截圖</td><td>圖片 bytes 作為 tool response 回傳，進入 context window</td><td>存成 PNG 落地磁碟，agent 沒有主動讀取就不會進 context</td></tr><tr><td>累積效應</td><td>每多跑一步，舊的、已經過期的畫面仍留在對話裡</td><td>每一步都是獨立、帶時間戳的檔案，需要哪一版才開哪一版</td></tr></tbody></table><p>CLI 每下一個指令，回應大致是這樣：</p><div class="cb-wrap" data-astro-cid-c6nuo4je><div class="cb-bar" data-astro-cid-c6nuo4je><span class="cb-label" data-astro-cid-c6nuo4je>playwright-cli goto</span><button class="cb-copy" data-code="$ playwright-cli goto https://example.com
+
+### Page
+- Page URL: https://example.com/
+- Page Title: Example Domain
+
+### Snapshot
+[Snapshot](.playwright-cli/page-2026-02-14T19-22-42-679Z.yml)" data-astro-cid-c6nuo4je>複製</button></div><div class="cb-inner" data-astro-cid-c6nuo4je><pre class="astro-code one-dark-pro" style="background-color:#282c34;color:#abb2bf; overflow-x: auto;" tabindex="0" data-astro-cid-c6nuo4je data-language="text"><code><span class="line"><span>$ playwright-cli goto https://example.com</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>### Page</span></span>
+<span class="line"><span>- Page URL: https://example.com/</span></span>
+<span class="line"><span>- Page Title: Example Domain</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>### Snapshot</span></span>
+<span class="line"><span>[Snapshot](.playwright-cli/page-2026-02-14T19-22-42-679Z.yml)</span></span></code></pre></div></div><script type="module">document.querySelectorAll(`.cb-copy`).forEach(e=>{e.addEventListener(`click`,()=>{let t=e.dataset.code;t&&navigator.clipboard.writeText(t).then(()=>{e.textContent=`已複製!`,e.classList.add(`copied`),setTimeout(()=>{e.textContent=`複製`,e.classList.remove(`copied`)},2e3)})})});</script><p>注意最後一行——它沒有把整份元素清單倒出來，只給一個檔案路徑。AI 真的要細看時才去開那個檔案；多數時候，它其實只需要上一步 <code>snapshot</code> 給過的 ref（例如 <code>e21</code>），根本不用重新讀。</p><h2>數字怎麼看：官方 benchmark 約 4 倍差距</h2><p>Playwright 團隊自己量過同一個任務：走 MCP 大約消耗 <strong>114,000 tokens</strong>，走 CLI 大約 <strong>27,000 tokens</strong>，差距約 4 倍。差距的來源正是上一節的兩件事——工具 schema 的一次性開銷，以及 snapshot／截圖是否進入 context。</p><div class="call warn"><span class="ci">⚠️</span><div><strong>這個數字要當方向看，不要當保證</strong><p>實際省多少，取決於頁面複雜度、以及 agent 讀了幾次畫面。比省錢更有感的通常是另一件事：對話不會被過期畫面塞滿，agent 能撐更多步而不開始「亂點早就不在畫面上的按鈕」。</p></div></div><figure class="svg-fig">
+<svg viewBox="0 0 800 460" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-ch02-main" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--border)" />
+    </marker>
+  </defs>
+
+  <g font-family="system-ui, sans-serif">
+    <text x="400" y="32" text-anchor="middle" font-size="19px" font-weight="bold" fill="var(--text)">AI 讀取畫面之後，資料去了哪裡？</text>
+
+    <text x="210" y="65" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--muted)">Playwright MCP</text>
+    <text x="590" y="65" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--accent)">Playwright CLI</text>
+    <line x1="400" y1="50" x2="400" y2="440" stroke="var(--border)" stroke-dasharray="4 4" stroke-width="2" />
+
+    <!-- Row A：兩者共同起點 -->
+    <rect x="60" y="80" width="300" height="70" rx="8" fill="var(--bg2)" stroke="var(--border)" stroke-width="2" />
+    <text x="210" y="108" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">AI 讀取頁面畫面</text>
+    <text x="210" y="130" text-anchor="middle" font-size="15px" fill="var(--text)" opacity="0.7">取得 accessibility tree／截圖</text>
+
+    <rect x="440" y="80" width="300" height="70" rx="8" fill="var(--bg2)" stroke="var(--border)" stroke-width="2" />
+    <text x="590" y="108" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">AI 讀取頁面畫面</text>
+    <text x="590" y="130" text-anchor="middle" font-size="15px" fill="var(--text)" opacity="0.7">取得 accessibility tree／截圖</text>
+
+    <path d="M 210 150 L 210 172" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch02-main)" />
+    <path d="M 590 150 L 590 172" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch02-main)" />
+
+    <!-- Row B：處理方式分岔 -->
+    <rect x="60" y="180" width="300" height="70" rx="8" fill="rgba(239,68,68,0.07)" stroke="#ef4444" stroke-width="2" />
+    <text x="210" y="208" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">整份資料塞進 tool response</text>
+    <text x="210" y="230" text-anchor="middle" font-size="15px" fill="#ef4444">直接進入對話歷史（context window）</text>
+
+    <rect x="440" y="180" width="300" height="70" rx="8" fill="rgba(16,185,129,0.07)" stroke="#10b981" stroke-width="2" />
+    <text x="590" y="208" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">存成 .yml／PNG 檔案</text>
+    <text x="590" y="230" text-anchor="middle" font-size="15px" fill="#10b981">對話裡只留一行檔案路徑</text>
+
+    <path d="M 210 250 L 210 272" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch02-main)" />
+    <path d="M 590 250 L 590 272" fill="none" stroke="var(--border)" stroke-width="2" marker-end="url(#arr-ch02-main)" />
+
+    <!-- Row C：累積效應 -->
+    <rect x="60" y="280" width="300" height="70" rx="8" fill="rgba(239,68,68,0.07)" stroke="#ef4444" stroke-width="2" />
+    <text x="210" y="308" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">舊畫面持續佔用對話</text>
+    <text x="210" y="330" text-anchor="middle" font-size="15px" fill="#ef4444">每多一步，過期畫面仍留在 context 裡</text>
+
+    <rect x="440" y="280" width="300" height="70" rx="8" fill="rgba(16,185,129,0.07)" stroke="#10b981" stroke-width="2" />
+    <text x="590" y="308" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">需要才開，不佔對話</text>
+    <text x="590" y="330" text-anchor="middle" font-size="15px" fill="#10b981">每步獨立、帶時間戳，按需讀取</text>
+
+    <!-- 分隔線 + 底部 benchmark 總結 -->
+    <line x1="60" y1="365" x2="740" y2="365" stroke="var(--border)" stroke-dasharray="4 4" stroke-width="1.5" />
+    <rect x="60" y="380" width="680" height="60" rx="8" fill="rgba(139,92,246,0.06)" stroke="#8b5cf6" stroke-width="2" />
+    <text x="400" y="405" text-anchor="middle" font-size="17px" font-weight="bold" fill="var(--text)">官方 benchmark（同一任務）</text>
+    <text x="400" y="428" text-anchor="middle" font-size="15px" fill="var(--text)" opacity="0.7">MCP ≈ 114,000 tokens vs CLI ≈ 27,000 tokens（約 4 倍差距）</text>
+  </g>
+</svg>
+<figcaption>同一份畫面資料，MCP 直接塞進對話歷史造成 context 持續累積，CLI 落地成檔案、對話裡只留路徑；這正是官方 benchmark 中 4 倍 token 差距的來源。</figcaption></figure><h2>可用指令數的落差</h2><p>因為 CLI 的資料不會塞進 context，官方索性把指令集開得更廣——涵蓋 network mock、tracing、video 錄製、視覺化 dashboard 等 MCP 預設不會開啟的類別。MCP 為了控制 context 大小，預設只啟用一個子集，其餘要額外設定才會出現在工具清單裡。指令數量差距本身就是 CLI 架構帶來的紅利：資料不占 context，自然可以放心多開幾十個指令。</p><h2>什麼時候用哪一個</h2><p>三個問題基本上就能決定答案：</p><table><thead><tr><th>問題</th><th>回答</th><th>建議</th></tr></thead><tbody><tr><td>Agent 能不能讀寫檔案、跑 shell 指令？</td><td>不能（純聊天介面）</td><td>只能用 MCP</td></tr><tr><td>Agent 能不能讀寫檔案、跑 shell 指令？</td><td>能（Claude Code、Copilot 這類）</td><td>兩者皆可，看下一題</td></tr><tr><td>這趟任務的性質？</td><td>要邊看邊想、探索沒看過的頁面</td><td>MCP 比較順——它的即時性有價值</td></tr><tr><td>這趟任務的性質？</td><td>步驟已經清楚，照著做完並留證據</td><td>CLI 比較划算——尤其超過十幾步之後</td></tr></tbody></table><div class="call tip"><span class="ci">💡</span><div><strong>務實做法：兩個都用</strong><p>成熟團隊常見的分工是「MCP 做一次性的理解，CLI 做重複的執行」——面對沒看過的頁面，先用 MCP 探索、讓 agent 邊看邊摸清楚有哪些功能；一旦觀察轉成明確的操作流程，後續的執行、回歸測試、留證，全部交給 CLI。下一章會先釐清一個常見的命名混淆：你在舊教學裡看到的「Playwright CLI」，很可能不是本書講的這個。</p></div></div></div><nav class="cnav" data-astro-cid-ccykbmgk><a href="/playwright-cli/ch01-what-is-playwright-cli" class="prev" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>← 上一章</span><span class="nt" data-astro-cid-ccykbmgk>Playwright CLI 是什麼，以及為什麼 AI agent 需要它</span></a><a href="/playwright-cli/ch03-terminology" class="next" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>下一章 →</span><span class="nt" data-astro-cid-ccykbmgk>釐清「Playwright CLI」的兩種意思：npx playwright 與 @playwright/cli</span></a></nav></main></div><script>
+    // Theme
+    const html = document.documentElement;
+    const tt = document.getElementById('tt');
+    const isun = document.getElementById('isun');
+    const imoon = document.getElementById('imoon');
+    function syncIcons() {
+      const dk = html.classList.contains('dark');
+      isun.style.display = dk ? 'block' : 'none';
+      imoon.style.display = dk ? 'none' : 'block';
+    }
+    syncIcons();
+    tt?.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('cc-theme', html.classList.contains('dark') ? 'dark' : 'light');
+      syncIcons();
+    });
+
+    // Progress
+    const pb = document.getElementById('pb');
+    window.addEventListener('scroll', () => {
+      const t = document.documentElement.scrollHeight - window.innerHeight;
+      pb.style.width = t > 0 ? `${(window.scrollY / t) * 100}%` : '0%';
+    }, { passive: true });
+
+    // Sidebar part toggles
+    document.querySelectorAll('.pt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.pid;
+        const list = document.querySelector(`[data-pl="${id}"]`);
+        btn.classList.toggle('open');
+        list?.classList.toggle('closed');
+      });
+    });
+
+    // Mobile menu
+    const sb = document.getElementById('sb');
+    const ov = document.getElementById('ov');
+    const mb = document.getElementById('mbtn');
+    const open = () => { sb.classList.add('open'); ov.classList.add('open'); document.body.style.overflow='hidden'; };
+    const close = () => { sb.classList.remove('open'); ov.classList.remove('open'); document.body.style.overflow=''; };
+    mb?.addEventListener('click', open);
+    ov?.addEventListener('click', close);
+  </script></body></html>

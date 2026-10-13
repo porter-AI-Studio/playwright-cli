@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="zh-TW" data-astro-cid-ccykbmgk><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>命名 session、persistent profile 與 storage state | Playwright CLI 完整指南</title><meta name="description" content="用 -s=name 開多個獨立瀏覽器、PLAYWRIGHT_CLI_SESSION 綁定 agent process、state-save / state-load 保存登入態，以及 persistent profile 的汙染風險。"><link rel="icon" href="/playwright-cli/favicon.svg" type="image/svg+xml"><script>
+    (function () {
+      const s = localStorage.getItem('cc-theme');
+      const d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (s === 'dark' || (!s && d)) document.documentElement.classList.add('dark');
+    })();
+  </script><link rel="stylesheet" href="/playwright-cli/_astro/DocsLayout.jWWT8cTA.css"></head><body data-astro-cid-ccykbmgk><div id="pb" data-astro-cid-ccykbmgk></div><header data-astro-cid-ccykbmgk><div class="hi" data-astro-cid-ccykbmgk><div class="hl" data-astro-cid-ccykbmgk><button id="mbtn" class="ibtn" aria-label="選單" data-astro-cid-ccykbmgk><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" data-astro-cid-ccykbmgk></path></svg></button><a href="/playwright-cli/" class="site-name" data-astro-cid-ccykbmgk><span class="logo" data-astro-cid-ccykbmgk>PW</span>&nbsp;&nbsp;Playwright CLI 完整指南</a></div><div class="hr" data-astro-cid-ccykbmgk><button id="tt" class="ibtn" aria-label="切換主題" data-astro-cid-ccykbmgk><svg id="isun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728 0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" data-astro-cid-ccykbmgk></path></svg><svg id="imoon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 0 1 8.646 3.646 9.003 9.003 0 0 0 12 21a9.003 9.003 0 0 0 8.354-5.646z" data-astro-cid-ccykbmgk></path></svg></button></div></div></header><div id="layout" data-astro-cid-ccykbmgk><nav id="sb" data-astro-cid-ccykbmgk><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="0" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 0：前言</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="0" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/preface" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>0.</span><span data-astro-cid-ccykbmgk>前言</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="1" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 1：認識 Playwright CLI</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="1" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch01-what-is-playwright-cli" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>1.</span><span data-astro-cid-ccykbmgk>Playwright CLI 是什麼，以及為什麼 AI agent 需要它</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch02-cli-vs-mcp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>2.</span><span data-astro-cid-ccykbmgk>Playwright CLI vs Playwright MCP：token 經濟學與選型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch03-terminology" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>3.</span><span data-astro-cid-ccykbmgk>釐清「Playwright CLI」的兩種意思：npx playwright 與 @playwright/cli</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="2" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 2：安裝與環境設定</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="2" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch04-install" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>4.</span><span data-astro-cid-ccykbmgk>安裝：CLI 本體與 skills 兩層模型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch05-browsers-config" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>5.</span><span data-astro-cid-ccykbmgk>瀏覽器安裝、設定檔與環境變數</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch06-agent-setup" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>6.</span><span data-astro-cid-ccykbmgk>在 Claude Code / Codex 裡啟用 skill 並驗證</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="3" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 3：核心操作模型</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="3" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch07-snapshot-ref-loop" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>7.</span><span data-astro-cid-ccykbmgk>Snapshot → ref → 操作：核心迴圈</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch08-command-reference" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>8.</span><span data-astro-cid-ccykbmgk>完整指令參考：Core / Navigation / Storage / Network / DevTools</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch09-targeting-elements" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>9.</span><span data-astro-cid-ccykbmgk>元素定位：ref、CSS selector、Playwright locator、find</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch10-sessions-storage" class="active" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>10.</span><span data-astro-cid-ccykbmgk>命名 session、persistent profile 與 storage state</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="4" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 4：進階能力</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="4" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch11-network-mock" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>11.</span><span data-astro-cid-ccykbmgk>網路攔截與 Mock：route / unroute</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch12-codegen-recording" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>12.</span><span data-astro-cid-ccykbmgk>codegen、recording、tracing 與 video</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch13-attach-cdp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>13.</span><span data-astro-cid-ccykbmgk>attach 既有瀏覽器：CDP、extension 與視覺儀表板</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch14-test-generation" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>14.</span><span data-astro-cid-ccykbmgk>測試生成：plan / generate / heal</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="5" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 5：AI Agent 實戰工作流</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="5" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch15-exploratory-testing" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>15.</span><span data-astro-cid-ccykbmgk>用 Claude Code + Playwright CLI 做探索性測試</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch16-e2e-from-spec" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>16.</span><span data-astro-cid-ccykbmgk>從測試案例 / charter 到 Playwright 測試檔</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch17-freeze-to-script" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>17.</span><span data-astro-cid-ccykbmgk>把探索流程固化成腳本，省下 AI token</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch18-pitfalls-faq" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>18.</span><span data-astro-cid-ccykbmgk>踩雷、疑難排解與 FAQ</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="6" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 6：附錄</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="6" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/about" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>19.</span><span data-astro-cid-ccykbmgk>關於本書與資料來源</span></a></li></ul></div></nav><div id="ov" data-astro-cid-ccykbmgk></div><main data-astro-cid-ccykbmgk><div class="cb" data-astro-cid-ccykbmgk><p class="clabel">第 10 章 · Part 3：核心操作模型</p><h1>命名 session、persistent profile 與 storage state</h1><p class="cdesc">多個 agent 共用一台機器時，session 隔離是必修課。</p><h2>預設 profile：留在記憶體</h2><p>預設情況下，瀏覽器 profile 只在記憶體裡。cookie 和 storage 在<strong>同一個 session 的多次指令之間</strong>保留， 但瀏覽器一關就沒了。這也是為什麼六條分開的 shell 指令能操作同一個 TodoMVC 頁面，而不是各自開六個瀏覽器。</p><pre><code>playwright-cli open https://your-app.com
+playwright-cli fill e3 "hello"     # 同一 session，狀態延續
+playwright-cli close               # 關掉，記憶體 profile 消失</code></pre><h2>命名 session：平行且互不干擾</h2><p>用 <code>-s=</code> 給 session 命名，就能同時跑多個獨立瀏覽器——不同角色、不同 context 各一個：</p><pre><code>playwright-cli open https://your-app.com                 # 預設 session
+playwright-cli -s=admin open https://your-app.com/admin  # 另一個 session
+playwright-cli -s=example open https://example.com --persistent
+
+playwright-cli list        # 列出所有 session
+playwright-cli close-all   # 關掉全部
+playwright-cli kill-all    # 強制殺掉全部瀏覽器進程
+playwright-cli -s=admin delete-data   # 刪掉某個 session 的使用者資料</code></pre><figure class="svg-fig">
+<svg viewBox="0 0 800 320" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+  <g font-family="system-ui, sans-serif">
+    <rect x="10" y="10" width="780" height="300" fill="var(--bg)" stroke="var(--border)" stroke-dasharray="4 4" rx="12" />
+    <text x="30" y="40" font-size="19px" font-weight="bold" fill="var(--text)">多個 Agent 平行作業：命名 Session 互不干擾</text>
+
+    <rect x="40" y="70" width="220" height="185" rx="8" fill="rgba(59,130,246,0.06)" stroke="#3b82f6" stroke-width="2" />
+    <text x="150" y="95" text-anchor="middle" font-size="17px" font-weight="bold" fill="#3b82f6">預設 Session</text>
+    <text x="150" y="112" text-anchor="middle" font-size="14px" fill="var(--muted)">(未加 -s=)</text>
+    <line x1="60" y1="122" x2="240" y2="122" stroke="var(--border)" stroke-width="1" />
+    <rect x="60" y="140" width="180" height="35" fill="var(--bg2)" stroke="var(--border)" rx="4" />
+    <text x="150" y="162" text-anchor="middle" font-size="15px" fill="var(--text)">記憶體 profile</text>
+    <rect x="60" y="190" width="180" height="35" fill="var(--bg2)" stroke="var(--border)" rx="4" />
+    <text x="150" y="212" text-anchor="middle" font-size="15px" fill="var(--text)">關閉即消失</text>
+
+    <rect x="290" y="70" width="220" height="185" rx="8" fill="rgba(139,92,246,0.06)" stroke="#8b5cf6" stroke-width="2" />
+    <text x="400" y="95" text-anchor="middle" font-size="17px" font-weight="bold" fill="#8b5cf6">-s=admin</text>
+    <text x="400" y="112" text-anchor="middle" font-size="14px" fill="var(--muted)">(獨立瀏覽器 context)</text>
+    <line x1="310" y1="122" x2="490" y2="122" stroke="var(--border)" stroke-width="1" />
+    <rect x="310" y="140" width="180" height="35" fill="var(--bg2)" stroke="var(--border)" rx="4" />
+    <text x="400" y="162" text-anchor="middle" font-size="15px" fill="var(--text)">操作 /admin 頁面</text>
+    <rect x="310" y="190" width="180" height="35" fill="var(--bg2)" stroke="var(--border)" rx="4" />
+    <text x="400" y="212" text-anchor="middle" font-size="15px" fill="var(--text)">彼此互不干擾</text>
+
+    <rect x="540" y="70" width="220" height="185" rx="8" fill="rgba(107,114,128,0.08)" stroke="#6b7280" stroke-width="2" />
+    <text x="650" y="95" text-anchor="middle" font-size="17px" font-weight="bold" fill="#6b7280">-s=example</text>
+    <text x="650" y="112" text-anchor="middle" font-size="14px" fill="var(--muted)">(--persistent 落地)</text>
+    <line x1="560" y1="122" x2="740" y2="122" stroke="var(--border)" stroke-width="1" />
+    <rect x="560" y="140" width="180" height="35" fill="var(--bg2)" stroke="var(--border)" rx="4" />
+    <text x="650" y="162" text-anchor="middle" font-size="15px" fill="var(--text)">profile 寫入磁碟</text>
+    <rect x="560" y="190" width="180" height="35" fill="var(--bg2)" stroke="var(--border)" rx="4" />
+    <text x="650" y="212" text-anchor="middle" font-size="15px" fill="var(--text)">跨重啟保留登入態</text>
+
+    <text x="400" y="285" text-anchor="middle" font-size="15px" fill="#ef4444">⚠️ 多個 agent 共用預設 session 會互相干擾</text>
+  </g>
+</svg>
+<figcaption>三個命名 session 各自擁有獨立的瀏覽器與 profile，平行作業互不干擾；反之多個 agent 共用同一個預設 session，snapshot / ref 迴圈就會彼此打架。</figcaption></figure><h2>綁定 agent process：PLAYWRIGHT_CLI_SESSION</h2><p>讓某個 agent process 啟動的所有 <code>playwright-cli</code> 指令都用同一個 session：</p><pre><code>PLAYWRIGHT_CLI_SESSION=todo-app claude .</code></pre><p>這是 <code>playwright-cli</code> 少數用 <code>PLAYWRIGHT_CLI_</code> 前綴的變數（其餘設定用 <code>PLAYWRIGHT_MCP_</code>，見 <a href="/ch05-browsers-config">第 5 章</a>）。 也可以不設環境變數，直接叫 agent「每個指令前面加 <code>-s=todo-app</code>」。</p><div class="call warn"><span class="ci">⚠️</span><div><strong>多個 agent 共用預設 session 會互相踩</strong><p>兩個 agent 都用預設 session 時，其中一個導航或改動頁面，另一個的 snapshot / ref 迴圈就錯亂了。平行作業前，一定先給每個 agent 一個命名 session 或 <code>PLAYWRIGHT_CLI_SESSION</code>。</p></div></div><h2>storage state：跳過登入流程</h2><p>登入一次，把狀態存起來，之後直接載入、略過登入：</p><pre><code># 登入完成後存檔
+playwright-cli state-save logged-in.json
+
+# 之後的 run 直接載入
+playwright-cli state-load logged-in.json</code></pre><p>需要更細顆粒時，用 cookie / localStorage / sessionStorage 的個別指令：</p><pre><code>playwright-cli cookie-list --domain your-app.com
+playwright-cli cookie-set session_id abc123
+playwright-cli localstorage-set feature_flag on
+playwright-cli sessionstorage-clear</code></pre><div class="call warn"><span class="ci">🔒</span><div><strong>storage state 檔含 cookie 與 token</strong><p><code>logged-in.json</code> 之類的檔案等同一組有效憑證，當機密處理：別進版控、別在共用目錄留著。要餵機密給流程，用 <code>PLAYWRIGHT_MCP_SECRETS_FILE</code> 指向 dotenv 格式的檔。</p></div></div><h2>persistent profile 的汙染風險</h2><p><code>--persistent</code> 或 <code>--profile=&lt;path&gt;</code> 會把 profile 落地，跨瀏覽器重啟保留——方便，但也把上一次 run 的登入、快取、彈窗狀態帶到下一次。 預設先用記憶體 profile；<strong>只有在「狀態存活是刻意需求」時</strong>才 opt-in persistent。</p><h2>下一步</h2><p>session 與狀態管好之後，進 Part 4 的進階能力：<a href="/ch11-network-mock">第 11 章</a> 從網路攔截與 Mock 開始。</p></div><nav class="cnav" data-astro-cid-ccykbmgk><a href="/playwright-cli/ch09-targeting-elements" class="prev" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>← 上一章</span><span class="nt" data-astro-cid-ccykbmgk>元素定位：ref、CSS selector、Playwright locator、find</span></a><a href="/playwright-cli/ch11-network-mock" class="next" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>下一章 →</span><span class="nt" data-astro-cid-ccykbmgk>網路攔截與 Mock：route / unroute</span></a></nav></main></div><script>
+    // Theme
+    const html = document.documentElement;
+    const tt = document.getElementById('tt');
+    const isun = document.getElementById('isun');
+    const imoon = document.getElementById('imoon');
+    function syncIcons() {
+      const dk = html.classList.contains('dark');
+      isun.style.display = dk ? 'block' : 'none';
+      imoon.style.display = dk ? 'none' : 'block';
+    }
+    syncIcons();
+    tt?.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('cc-theme', html.classList.contains('dark') ? 'dark' : 'light');
+      syncIcons();
+    });
+
+    // Progress
+    const pb = document.getElementById('pb');
+    window.addEventListener('scroll', () => {
+      const t = document.documentElement.scrollHeight - window.innerHeight;
+      pb.style.width = t > 0 ? `${(window.scrollY / t) * 100}%` : '0%';
+    }, { passive: true });
+
+    // Sidebar part toggles
+    document.querySelectorAll('.pt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.pid;
+        const list = document.querySelector(`[data-pl="${id}"]`);
+        btn.classList.toggle('open');
+        list?.classList.toggle('closed');
+      });
+    });
+
+    // Mobile menu
+    const sb = document.getElementById('sb');
+    const ov = document.getElementById('ov');
+    const mb = document.getElementById('mbtn');
+    const open = () => { sb.classList.add('open'); ov.classList.add('open'); document.body.style.overflow='hidden'; };
+    const close = () => { sb.classList.remove('open'); ov.classList.remove('open'); document.body.style.overflow=''; };
+    mb?.addEventListener('click', open);
+    ov?.addEventListener('click', close);
+  </script></body></html>

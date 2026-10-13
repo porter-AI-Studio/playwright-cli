@@ -1,0 +1,119 @@
+<!DOCTYPE html><html lang="zh-TW" data-astro-cid-ccykbmgk><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>釐清「Playwright CLI」的兩種意思：npx playwright 與 @playwright/cli | Playwright CLI 完整指南</title><meta name="description" content="說明 2026 年前的 npx playwright 子指令（screenshot / codegen / open）與新的 @playwright/cli agent 專用工具是兩套不同的命令面，避免照抄舊教學踩雷。"><link rel="icon" href="/playwright-cli/favicon.svg" type="image/svg+xml"><script>
+    (function () {
+      const s = localStorage.getItem('cc-theme');
+      const d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (s === 'dark' || (!s && d)) document.documentElement.classList.add('dark');
+    })();
+  </script><link rel="stylesheet" href="/playwright-cli/_astro/DocsLayout.jWWT8cTA.css"><style>.cb-wrap[data-astro-cid-c6nuo4je]{margin-bottom:1.25rem}.cb-bar[data-astro-cid-c6nuo4je]{background:#1a1a2e;border:1px solid #ffffff14;border-bottom-color:#ffffff0d;border-radius:6px 6px 0 0;justify-content:space-between;align-items:center;min-height:1.8rem;padding:.18rem .5rem .18rem .75rem;display:flex}.cb-label[data-astro-cid-c6nuo4je]{color:#a6adc8;letter-spacing:.04em;font-family:Fira Code,Cascadia Code,Consolas,monospace;font-size:.73rem}.cb-inner[data-astro-cid-c6nuo4je] pre{border-radius:0 0 8px 8px!important;margin-bottom:0!important}.cb-copy[data-astro-cid-c6nuo4je]{color:#888;cursor:pointer;background:#ffffff14;border:1px solid #ffffff1f;border-radius:4px;flex-shrink:0;padding:.15rem .55rem;font-size:.7rem;transition:all .15s}.cb-copy[data-astro-cid-c6nuo4je]:hover{color:#fff;background:#ffffff2e}.cb-copy[data-astro-cid-c6nuo4je].copied{color:#4ec9b0;border-color:#4ec9b0}
+</style></head><body data-astro-cid-ccykbmgk><div id="pb" data-astro-cid-ccykbmgk></div><header data-astro-cid-ccykbmgk><div class="hi" data-astro-cid-ccykbmgk><div class="hl" data-astro-cid-ccykbmgk><button id="mbtn" class="ibtn" aria-label="選單" data-astro-cid-ccykbmgk><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" data-astro-cid-ccykbmgk></path></svg></button><a href="/playwright-cli/" class="site-name" data-astro-cid-ccykbmgk><span class="logo" data-astro-cid-ccykbmgk>PW</span>&nbsp;&nbsp;Playwright CLI 完整指南</a></div><div class="hr" data-astro-cid-ccykbmgk><button id="tt" class="ibtn" aria-label="切換主題" data-astro-cid-ccykbmgk><svg id="isun" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:none" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364-.707-.707M6.343 6.343l-.707-.707m12.728 0-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" data-astro-cid-ccykbmgk></path></svg><svg id="imoon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 0 1 8.646 3.646 9.003 9.003 0 0 0 12 21a9.003 9.003 0 0 0 8.354-5.646z" data-astro-cid-ccykbmgk></path></svg></button></div></div></header><div id="layout" data-astro-cid-ccykbmgk><nav id="sb" data-astro-cid-ccykbmgk><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="0" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 0：前言</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="0" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/preface" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>0.</span><span data-astro-cid-ccykbmgk>前言</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="1" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 1：認識 Playwright CLI</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="1" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch01-what-is-playwright-cli" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>1.</span><span data-astro-cid-ccykbmgk>Playwright CLI 是什麼，以及為什麼 AI agent 需要它</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch02-cli-vs-mcp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>2.</span><span data-astro-cid-ccykbmgk>Playwright CLI vs Playwright MCP：token 經濟學與選型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch03-terminology" class="active" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>3.</span><span data-astro-cid-ccykbmgk>釐清「Playwright CLI」的兩種意思：npx playwright 與 @playwright/cli</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="2" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 2：安裝與環境設定</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="2" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch04-install" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>4.</span><span data-astro-cid-ccykbmgk>安裝：CLI 本體與 skills 兩層模型</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch05-browsers-config" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>5.</span><span data-astro-cid-ccykbmgk>瀏覽器安裝、設定檔與環境變數</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch06-agent-setup" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>6.</span><span data-astro-cid-ccykbmgk>在 Claude Code / Codex 裡啟用 skill 並驗證</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt open" data-pid="3" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 3：核心操作模型</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl" data-pl="3" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch07-snapshot-ref-loop" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>7.</span><span data-astro-cid-ccykbmgk>Snapshot → ref → 操作：核心迴圈</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch08-command-reference" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>8.</span><span data-astro-cid-ccykbmgk>完整指令參考：Core / Navigation / Storage / Network / DevTools</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch09-targeting-elements" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>9.</span><span data-astro-cid-ccykbmgk>元素定位：ref、CSS selector、Playwright locator、find</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch10-sessions-storage" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>10.</span><span data-astro-cid-ccykbmgk>命名 session、persistent profile 與 storage state</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="4" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 4：進階能力</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="4" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch11-network-mock" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>11.</span><span data-astro-cid-ccykbmgk>網路攔截與 Mock：route / unroute</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch12-codegen-recording" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>12.</span><span data-astro-cid-ccykbmgk>codegen、recording、tracing 與 video</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch13-attach-cdp" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>13.</span><span data-astro-cid-ccykbmgk>attach 既有瀏覽器：CDP、extension 與視覺儀表板</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch14-test-generation" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>14.</span><span data-astro-cid-ccykbmgk>測試生成：plan / generate / heal</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="5" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 5：AI Agent 實戰工作流</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="5" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch15-exploratory-testing" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>15.</span><span data-astro-cid-ccykbmgk>用 Claude Code + Playwright CLI 做探索性測試</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch16-e2e-from-spec" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>16.</span><span data-astro-cid-ccykbmgk>從測試案例 / charter 到 Playwright 測試檔</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch17-freeze-to-script" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>17.</span><span data-astro-cid-ccykbmgk>把探索流程固化成腳本，省下 AI token</span></a></li><li data-astro-cid-ccykbmgk><a href="/playwright-cli/ch18-pitfalls-faq" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>18.</span><span data-astro-cid-ccykbmgk>踩雷、疑難排解與 FAQ</span></a></li></ul></div><div class="np" data-astro-cid-ccykbmgk><button class="pt" data-pid="6" data-astro-cid-ccykbmgk><span data-astro-cid-ccykbmgk>Part 6：附錄</span><svg class="arr" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" data-astro-cid-ccykbmgk><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" data-astro-cid-ccykbmgk></path></svg></button><ul class="nl closed" data-pl="6" data-astro-cid-ccykbmgk><li data-astro-cid-ccykbmgk><a href="/playwright-cli/about" data-astro-cid-ccykbmgk><span class="cn" data-astro-cid-ccykbmgk>19.</span><span data-astro-cid-ccykbmgk>關於本書與資料來源</span></a></li></ul></div></nav><div id="ov" data-astro-cid-ccykbmgk></div><main data-astro-cid-ccykbmgk><div class="cb" data-astro-cid-ccykbmgk><p class="clabel">第 3 章 · Part 1：認識 Playwright CLI</p><h1>釐清「Playwright CLI」的兩種意思</h1><p class="cdesc">舊教學說的「Playwright CLI」和本書說的，往往不是同一個東西。</p><p>在網路上搜尋「Playwright CLI」，會同時查到兩種完全不同的東西——用錯一邊查文件，會覺得指令對不起來、範例跑不動。這一章先把兩者分乾淨，後面各章才不會混著講。</p><h2>舊的：<code>npx playwright</code>（測試框架內建）</h2><p>只要裝過 <code>@playwright/test</code>，專案裡就自帶一個 <code>playwright</code> 可執行檔，透過 <code>npx playwright &lt;子指令&gt;</code> 呼叫。它是測試框架的配套工具，設計給「人」在終端機操作，而不是給 AI agent 讀取用的：</p><div class="cb-wrap" data-astro-cid-c6nuo4je><div class="cb-bar" data-astro-cid-c6nuo4je><span class="cb-label" data-astro-cid-c6nuo4je>舊語意：@playwright/test 的子指令</span><button class="cb-copy" data-code="# @playwright/test 內建的子指令（安裝測試框架就有）
+npx playwright test              # 執行測試檔
+npx playwright codegen           # 錄製操作、產生程式碼
+npx playwright show-report       # 開啟 HTML 測試報告
+npx playwright install           # 安裝瀏覽器二進位檔" data-astro-cid-c6nuo4je>複製</button></div><div class="cb-inner" data-astro-cid-c6nuo4je><pre class="astro-code one-dark-pro" style="background-color:#282c34;color:#abb2bf; overflow-x: auto;" tabindex="0" data-astro-cid-c6nuo4je data-language="bash"><code><span class="line"><span style="color:#7F848E;font-style:italic"># @playwright/test 內建的子指令（安裝測試框架就有）</span></span>
+<span class="line"><span style="color:#61AFEF">npx</span><span style="color:#98C379"> playwright</span><span style="color:#98C379"> test</span><span style="color:#7F848E;font-style:italic">              # 執行測試檔</span></span>
+<span class="line"><span style="color:#61AFEF">npx</span><span style="color:#98C379"> playwright</span><span style="color:#98C379"> codegen</span><span style="color:#7F848E;font-style:italic">           # 錄製操作、產生程式碼</span></span>
+<span class="line"><span style="color:#61AFEF">npx</span><span style="color:#98C379"> playwright</span><span style="color:#98C379"> show-report</span><span style="color:#7F848E;font-style:italic">       # 開啟 HTML 測試報告</span></span>
+<span class="line"><span style="color:#61AFEF">npx</span><span style="color:#98C379"> playwright</span><span style="color:#98C379"> install</span><span style="color:#7F848E;font-style:italic">           # 安裝瀏覽器二進位檔</span></span></code></pre></div></div><script type="module">document.querySelectorAll(`.cb-copy`).forEach(e=>{e.addEventListener(`click`,()=>{let t=e.dataset.code;t&&navigator.clipboard.writeText(t).then(()=>{e.textContent=`已複製!`,e.classList.add(`copied`),setTimeout(()=>{e.textContent=`複製`,e.classList.remove(`copied`)},2e3)})})});</script><p>這些指令行之有年，網路上大部分「Playwright CLI 教學」文章講的其實是這一套——錄製測試、跑測試、看報告。它們不是本書的主題。</p><h2>新的：<code>@playwright/cli</code>（agent 專用工具）</h2><p>2026 年初，微軟另外發布了一個獨立的 npm 套件 <code>@playwright/cli</code>，安裝後提供一個全新的可執行檔 <code>playwright-cli</code>。它跟 <code>@playwright/test</code> 沒有相依關係，是專門設計給 Claude Code、GitHub Copilot 這類「有 shell 可以跑指令」的 coding agent 使用的瀏覽器操作工具——也就是上一章比較的那個 CLI：</p><div class="cb-wrap" data-astro-cid-c6nuo4je><div class="cb-bar" data-astro-cid-c6nuo4je><span class="cb-label" data-astro-cid-c6nuo4je>新語意：@playwright/cli 的指令</span><button class="cb-copy" data-code="# @playwright/cli（套件名），指令叫 playwright-cli，2026 年初推出
+npm install -g @playwright/cli@latest
+playwright-cli open https://example.com --headed
+playwright-cli snapshot
+playwright-cli click e21
+playwright-cli screenshot" data-astro-cid-c6nuo4je>複製</button></div><div class="cb-inner" data-astro-cid-c6nuo4je><pre class="astro-code one-dark-pro" style="background-color:#282c34;color:#abb2bf; overflow-x: auto;" tabindex="0" data-astro-cid-c6nuo4je data-language="bash"><code><span class="line"><span style="color:#7F848E;font-style:italic"># @playwright/cli（套件名），指令叫 playwright-cli，2026 年初推出</span></span>
+<span class="line"><span style="color:#61AFEF">npm</span><span style="color:#98C379"> install</span><span style="color:#D19A66"> -g</span><span style="color:#98C379"> @playwright/cli@latest</span></span>
+<span class="line"><span style="color:#61AFEF">playwright-cli</span><span style="color:#98C379"> open</span><span style="color:#98C379"> https://example.com</span><span style="color:#D19A66"> --headed</span></span>
+<span class="line"><span style="color:#61AFEF">playwright-cli</span><span style="color:#98C379"> snapshot</span></span>
+<span class="line"><span style="color:#61AFEF">playwright-cli</span><span style="color:#98C379"> click</span><span style="color:#98C379"> e21</span></span>
+<span class="line"><span style="color:#61AFEF">playwright-cli</span><span style="color:#98C379"> screenshot</span></span></code></pre></div></div><p>這才是本書從第 4 章開始要深入的主角：<code>snapshot</code> / <code>ref</code> / session 管理 / 視覺化 dashboard / skills 安裝，都是這一套獨有的能力，舊的 <code>npx playwright</code> 完全沒有對應指令。</p><h2>怎麼一眼分辨</h2><figure class="svg-fig">
+<svg viewBox="0 0 800 380" width="100%" height="auto" xmlns="http://www.w3.org/2000/svg">
+  <g font-family="system-ui, sans-serif">
+
+    <!-- 主標題 -->
+    <text x="400" y="30" text-anchor="middle"
+          font-size="19px" font-weight="bold" fill="var(--text)">舊 vs 新：兩套獨立的命令面</text>
+
+    <!-- 欄位標題 -->
+    <text x="225" y="58" text-anchor="middle"
+          font-size="17px" font-weight="bold" fill="var(--muted)">舊：npx playwright</text>
+    <text x="575" y="58" text-anchor="middle"
+          font-size="17px" font-weight="bold" fill="var(--accent)">新：@playwright/cli</text>
+
+    <!-- 中間分隔虛線 -->
+    <line x1="400" y1="45" x2="400" y2="293" stroke="var(--border)" stroke-width="1.5" stroke-dasharray="4 4" />
+
+    <!-- Row 1：套件來源 -->
+    <rect x="75" y="68" width="300" height="55" rx="8" fill="var(--bg2)" stroke="var(--border)" stroke-width="2" />
+    <text x="225" y="93" text-anchor="middle" font-size="15px" font-weight="bold" fill="var(--text)">套件：@playwright/test</text>
+    <text x="225" y="112" text-anchor="middle" font-size="14px" fill="var(--muted)">測試框架內建，安裝即有</text>
+
+    <rect x="425" y="68" width="300" height="55" rx="8" fill="var(--bg2)" stroke="var(--border)" stroke-width="2" />
+    <text x="575" y="93" text-anchor="middle" font-size="15px" font-weight="bold" fill="var(--text)">套件：@playwright/cli</text>
+    <text x="575" y="112" text-anchor="middle" font-size="14px" fill="var(--muted)">獨立 npm 套件，另行安裝</text>
+
+    <!-- Row 2：設計對象 -->
+    <rect x="75" y="143" width="300" height="55" rx="8" fill="var(--bg2)" stroke="var(--border)" stroke-width="2" />
+    <text x="225" y="168" text-anchor="middle" font-size="15px" font-weight="bold" fill="var(--text)">設計對象：人類操作者</text>
+    <text x="225" y="187" text-anchor="middle" font-size="14px" fill="var(--muted)">終端機手動輸入、看報告</text>
+
+    <rect x="425" y="143" width="300" height="55" rx="8" fill="var(--bg2)" stroke="var(--border)" stroke-width="2" />
+    <text x="575" y="168" text-anchor="middle" font-size="15px" font-weight="bold" fill="var(--text)">設計對象：AI coding agent</text>
+    <text x="575" y="187" text-anchor="middle" font-size="14px" fill="var(--muted)">透過 shell 呼叫、讀結構化輸出</text>
+
+    <!-- Row 3：核心指令（右欄用 accent 邊框強調本書主角） -->
+    <rect x="75" y="218" width="300" height="60" rx="8" fill="var(--bg2)" stroke="var(--border)" stroke-width="2" />
+    <text x="225" y="243" text-anchor="middle" font-size="15px" font-weight="bold" fill="var(--text)">核心指令</text>
+    <text x="225" y="262" text-anchor="middle" font-size="14px" fill="var(--muted)">test / codegen / show-report</text>
+
+    <rect x="425" y="218" width="300" height="60" rx="8" fill="var(--bg2)" stroke="var(--accent)" stroke-width="2" />
+    <text x="575" y="243" text-anchor="middle" font-size="15px" font-weight="bold" fill="var(--accent)">核心指令（50+ 個）</text>
+    <text x="575" y="262" text-anchor="middle" font-size="14px" fill="var(--text)" opacity="0.8">open / snapshot / click 等</text>
+
+    <!-- 底部提醒橫幅 -->
+    <rect x="75" y="303" width="650" height="55" rx="8" fill="rgba(245,158,11,0.07)" stroke="#f59e0b" stroke-width="2" />
+    <text x="400" y="335" text-anchor="middle" font-size="15px" font-weight="bold" fill="var(--text)">⚠️ 兩套命令面完全獨立，指令不能混用</text>
+
+  </g>
+</svg>
+<figcaption>舊的 npx playwright 是給人用的測試框架配套指令；新的 @playwright/cli 是獨立套件，設計給 AI agent 呼叫，兩套命令面完全獨立。</figcaption></figure><table><thead><tr><th></th><th>舊：npx playwright</th><th>新：@playwright/cli</th></tr></thead><tbody><tr><td>套件</td><td><code>@playwright/test</code>（測試框架自帶）</td><td><code>@playwright/cli</code>（獨立套件）</td></tr><tr><td>呼叫方式</td><td><code>npx playwright &lt;子指令&gt;</code></td><td><code>playwright-cli &lt;指令&gt;</code>（全域安裝後）</td></tr><tr><td>設計對象</td><td>人，在終端機手動操作</td><td>AI coding agent，透過 shell 呼叫</td></tr><tr><td>核心指令</td><td><code>test</code>、<code>codegen</code>、<code>show-report</code>、<code>install</code></td><td><code>open</code>、<code>snapshot</code>、<code>click</code>、<code>screenshot</code>…（50+ 個）</td></tr><tr><td>推出時間</td><td>隨 Playwright 框架初版就有，行之有年</td><td>2026 年初，晚於 Playwright MCP</td></tr><tr><td>互動模型</td><td>一次性命令，執行完就結束</td><td>daemon 常駐、session 可命名、狀態延續</td></tr></tbody></table><div class="call warn"><span class="ci">⚠️</span><div><strong>照抄舊教學最常踩的雷</strong><p>把 <code>npx playwright snapshot</code> 或 <code>npx playwright click e21</code> 貼進終端機——這兩個指令屬於新版 <code>playwright-cli</code>，不是 <code>npx playwright</code> 認得的子指令，會直接報錯找不到指令。反過來，想錄製測試、跑測試檔，找的也不是 <code>playwright-cli</code>，而是 <code>npx playwright codegen</code> / <code>npx playwright test</code>。兩套命令面完全獨立，不能混用。</p></div></div><p>本書之後提到「Playwright CLI」，一律指 <code>@playwright/cli</code> / <code>playwright-cli</code> 這一套 agent 專用工具。下一章開始實際安裝它。</p></div><nav class="cnav" data-astro-cid-ccykbmgk><a href="/playwright-cli/ch02-cli-vs-mcp" class="prev" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>← 上一章</span><span class="nt" data-astro-cid-ccykbmgk>Playwright CLI vs Playwright MCP：token 經濟學與選型</span></a><a href="/playwright-cli/ch04-install" class="next" data-astro-cid-ccykbmgk><span class="nd" data-astro-cid-ccykbmgk>下一章 →</span><span class="nt" data-astro-cid-ccykbmgk>安裝：CLI 本體與 skills 兩層模型</span></a></nav></main></div><script>
+    // Theme
+    const html = document.documentElement;
+    const tt = document.getElementById('tt');
+    const isun = document.getElementById('isun');
+    const imoon = document.getElementById('imoon');
+    function syncIcons() {
+      const dk = html.classList.contains('dark');
+      isun.style.display = dk ? 'block' : 'none';
+      imoon.style.display = dk ? 'none' : 'block';
+    }
+    syncIcons();
+    tt?.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('cc-theme', html.classList.contains('dark') ? 'dark' : 'light');
+      syncIcons();
+    });
+
+    // Progress
+    const pb = document.getElementById('pb');
+    window.addEventListener('scroll', () => {
+      const t = document.documentElement.scrollHeight - window.innerHeight;
+      pb.style.width = t > 0 ? `${(window.scrollY / t) * 100}%` : '0%';
+    }, { passive: true });
+
+    // Sidebar part toggles
+    document.querySelectorAll('.pt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.pid;
+        const list = document.querySelector(`[data-pl="${id}"]`);
+        btn.classList.toggle('open');
+        list?.classList.toggle('closed');
+      });
+    });
+
+    // Mobile menu
+    const sb = document.getElementById('sb');
+    const ov = document.getElementById('ov');
+    const mb = document.getElementById('mbtn');
+    const open = () => { sb.classList.add('open'); ov.classList.add('open'); document.body.style.overflow='hidden'; };
+    const close = () => { sb.classList.remove('open'); ov.classList.remove('open'); document.body.style.overflow=''; };
+    mb?.addEventListener('click', open);
+    ov?.addEventListener('click', close);
+  </script></body></html>
